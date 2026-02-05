@@ -124,11 +124,11 @@ elif menu == "1. Pengumpulan Data":
         * **Harga Rata-rata**: Memberikan baseline untuk mengidentifikasi apakah tren saat ini berada di atas atau di bawah nilai historis rata-rata.
         """)
 
-# MENU 2: PRAPEMROSESAN
-elif menu == "2. Prapemrosesan & Fitur":
-    st.header("Tahap 2: Prapemrosesan & Rekayasa Fitur")
+# MENU 2: PRAPEMROSESAN & FITUR
+elif menu == "2. Prapemrosesan Data":
+    st.header("⚙️ Tahap 2 - 5: Prapemrosesan & Rekayasa Fitur")
     
-    # Membagi menjadi 4 Tab sesuai alur kerja teknis
+    # Membagi menjadi 4 Tab sesuai alur kerja teknis di dokumen
     tab1, tab2, tab3, tab4 = st.tabs([
         "1. Data Cleaning", 
         "2. Feature Engineering", 
@@ -138,16 +138,17 @@ elif menu == "2. Prapemrosesan & Fitur":
     
     # --- TAB 1: DATA CLEANING ---
     with tab1:
-        st.subheader("Pembersihan Data (Cleaning)")
+        st.subheader("Pembersihan Data (Data Cleaning)")
         st.markdown("""
-        Proses awal untuk memastikan integritas data deret waktu:
-        * **Penanganan Missing Values**: Menggunakan teknik `ffill` dan `bfill` untuk mengisi kekosongan data akibat hari libur bursa atau anomali.
-        * **Seleksi Kolom**: Menghapus kolom `Adj Close` dan fokus pada kolom harga utama.
+        Tahap ini bertujuan memastikan integritas data deret waktu sebelum dilakukan perhitungan indikator.
+        * **Pengecekan Missing Values**: Mengidentifikasi kekosongan data akibat hari libur bursa.
+        * **Imputasi (ffill & bfill)**: Mengisi nilai kosong berdasarkan harga sebelumnya (*Forward Fill*) dan sesudahnya (*Backward Fill*) agar tren tidak terputus.
+        * **Seleksi Fitur**: Menghapus kolom `Adj Close` dan `Unnamed` untuk menyederhanakan struktur dataset mentah.
         """)
         
         img_02 = "Visual/02_Komparasi_Data_Cleaning.png"
         if os.path.exists(img_02):
-            st.image(img_02, caption="Visualisasi menunjukkan data sebelum cleaning memiliki gap/nilai kosong, sedangkan setelah cleaning data menjadi kontinu dan siap diproses.", use_container_width=True)
+            st.image(img_02, caption="Interpretasi: Grafik menunjukkan transisi dari data mentah yang terputus (kiri) menjadi data kontinu yang bersih (kanan).", use_container_width=True)
         else:
             st.error(f"File {img_02} tidak ditemukan.")
 
@@ -155,15 +156,16 @@ elif menu == "2. Prapemrosesan & Fitur":
     with tab2:
         st.subheader("Ekstraksi 22 Indikator Teknikal")
         st.markdown("""
-        Menambahkan variabel baru untuk menangkap pola pasar:
-        * **Trend**: SMA & EMA (5, 10, 20).
-        * **Momentum**: RSI & MACD.
-        * **Volatility**: Bollinger Bands & HL Range.
+        Model Random Forest membutuhkan fitur tambahan untuk menangkap dinamika pasar yang tidak terlihat pada harga penutupan saja.
+        * **Trend (SMA & EMA)**: Menangkap rata-rata harga jangka pendek (5 hari) hingga menengah (20 hari).
+        * **Momentum (RSI & MACD)**: Mengukur kekuatan pergerakan harga dan potensi kejenuhan pasar.
+        * **Volatility (Bollinger Bands)**: Mengidentifikasi rentang fluktuasi harga normal.
+        * **Lainnya**: Volume MA, Daily Return, dan HL Range (selisih High-Low).
         """)
         
         img_03 = f"Visual/03_Technical_Indicators_{bank_pilihan}.png"
         if os.path.exists(img_03):
-            st.image(img_03, caption=f"IGabungan indikator harian untuk {bank_pilihan} memberikan informasi lebih dalam kepada model dibanding hanya menggunakan harga tunggal.", use_container_width=True)
+            st.image(img_03, caption=f"Interpretasi: Visualisasi 22 fitur teknikal untuk {bank_pilihan} yang akan menjadi prediktor bagi algoritma Random Forest.", use_container_width=True)
         else:
             st.error(f"File {img_03} tidak ditemukan.")
 
@@ -171,17 +173,19 @@ elif menu == "2. Prapemrosesan & Fitur":
     with tab3:
         st.subheader("Normalisasi dengan MinMaxScaler")
         st.markdown("""
-        Menyamakan skala data agar fitur dengan angka besar (Volume) tidak mendominasi fitur kecil (Harga):
-        * **Metode**: Transformasi linear ke rentang **0 hingga 1**.
+        Dilakukan transformasi data agar semua fitur berada dalam skala yang seragam.
+        * **Metode**: MinMaxScaler mengubah nilai menjadi rentang **0 hingga 1**.
+        * **Tujuan**: Mencegah fitur dengan angka nominal besar (seperti Volume di angka jutaan) mendominasi fitur dengan angka kecil (seperti RSI di angka 0-100) saat proses pelatihan model.
         """)
         
-        col1, col2 = st.columns(2)
-        with col1:
+        col_norm1, col_norm2 = st.columns(2)
+        with col_norm1:
             img_04 = "Visual/04_Perbandingan_Normalisasi.png"
             if os.path.exists(img_04):
-                st.image(img_04, caption="Terlihat perbedaan distribusi data mentah yang lebar menjadi terkumpul dalam rentang 0-1.")
-        with col2:
-            img_05 = f"Visual/05_Distribusi_Setelah_Normalisasi.png"
+                st.image(img_04, caption="Interpretasi: Transformasi distribusi harga dari nilai nominal ke skala standar 0-1.")
+        
+        with col_norm2:
+            img_05 = f"Visual/05_Distribusi_Setelah_Normalisasi_{bank_pilihan}.png"
             if os.path.exists(img_05):
                 st.image(img_05, caption=f"Distribusi Normalisasi: {bank_pilihan}")
 
@@ -189,18 +193,18 @@ elif menu == "2. Prapemrosesan & Fitur":
     with tab4:
         st.subheader("Pembagian Data Training & Testing")
         st.markdown("""
-        Memisahkan data untuk melatih model dan menguji validitasnya:
-        * **Proporsi**: **80% Pelatihan** dan **20% Pengujian**.
-        * **Metode**: *Time-series Split* (Tanpa pengacakan) untuk mempertahankan urutan kronologis transaksi.
+        Pemisahan data dilakukan secara kronologis untuk menghindari *Data Leakage*.
+        * **Rasio**: **80% Training Set** (Data Historis Lama) dan **20% Testing Set** (Data Baru).
+        * **Konsep Time Series Split**: Tidak dilakukan pengacakan (*shuffle*) agar model belajar memprediksi masa depan berdasarkan urutan waktu masa lalu yang benar.
         """)
         
         img_06 = "Visual/06_Visualisasi_Pembagian_Pelatihan_Uji.png"
         if os.path.exists(img_06):
-            st.image(img_06, caption="Area hijau menunjukkan data yang dipelajari model, sedangkan area oranye adalah 'ujian' untuk model.", use_container_width=True)
+            st.image(img_06, caption="Interpretasi: Area hijau (Train) digunakan untuk membangun model, area oranye (Test) digunakan untuk validasi akurasi akhir.", use_container_width=True)
         
         img_07 = f"Visual/07_Distribusi_Uji_Pelatihan_{bank_pilihan}.png"
         if os.path.exists(img_07):
-            st.image(img_07, caption=f"Distribusi Pelatihan vs Uji: {bank_pilihan}")
+            st.image(img_07, caption=f"Interpretasi: Menjamin distribusi data pelatihan dan pengujian tetap konsisten untuk {bank_pilihan}.")
 
 # MENU 3: EVALUASI PERFORMA
 elif menu == "3. Evaluasi Performa Model":
