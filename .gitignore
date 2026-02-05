@@ -1,0 +1,9 @@
+# Abaikan folder data yang terlalu besar/teknis
+Data/Prepared/
+Data/Normalized/
+Data/Train/
+Data/Test/
+
+# Abaikan file sistem
+.DS_Store
+Thumbs.db

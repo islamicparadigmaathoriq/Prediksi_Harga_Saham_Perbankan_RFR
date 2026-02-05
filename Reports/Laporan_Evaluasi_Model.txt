@@ -1,0 +1,142 @@
+================================================================================
+LAPORAN EVALUASI MODEL KOMPREHENSIF
+Random Forest Regression - Prediksi Harga Saham
+================================================================================
+
+Generated: 2026-02-05 01:52:00
+Penanggung Jawab: Sopia Rita Meliala
+
+================================================================================
+1. RINGKASAN
+================================================================================
+Jumlah Bank yang Dievaluasi: 5
+Bank: BCA, BRI, Mandiri, BNI, BTN
+Metrik Target: R² Score ≥ 0.85
+Capaian Target Bank: 5/5
+
+================================================================================
+2. AGGREGATE PERFORMANCE (TEST SET)
+================================================================================
+Average MAE:  0.016957
+Average RMSE: 0.023364
+Average R²:   0.969176
+Average MAPE: inf%
+Min R²:       0.953284
+Max R²:       0.979374
+
+================================================================================
+3. KINERJA BANK INDIVIDUAL
+================================================================================
+
+BCA
+------------------------------------------------------------
+  Test Set Metrics:
+    MAE:         0.020290
+    RMSE:        0.027700
+    R² Score:    0.972780
+    MAPE:        inf%
+    Max Error:   0.101252
+    Mean Error:  -0.008082
+    Std Error:   0.026494
+
+  Overfitting Analysis:
+    Train R²:    0.999867
+    Test R²:     0.972780
+    Gap:         0.027086
+    Status:      Good generalization
+
+  Target:        TERCAPAI (R² ≥ 0.85)
+
+BRI
+------------------------------------------------------------
+  Test Set Metrics:
+    MAE:         0.009907
+    RMSE:        0.012893
+    R² Score:    0.979374
+    MAPE:        4.19%
+    Max Error:   0.036295
+    Mean Error:  0.002343
+    Std Error:   0.012679
+
+  Overfitting Analysis:
+    Train R²:    0.998702
+    Test R²:     0.979374
+    Gap:         0.019329
+    Status:      Good generalization
+
+  Target:        TERCAPAI (R² ≥ 0.85)
+
+Mandiri
+------------------------------------------------------------
+  Test Set Metrics:
+    MAE:         0.018559
+    RMSE:        0.023590
+    R² Score:    0.953284
+    MAPE:        6.26%
+    Max Error:   0.070005
+    Mean Error:  -0.003246
+    Std Error:   0.023365
+
+  Overfitting Analysis:
+    Train R²:    0.999080
+    Test R²:     0.953284
+    Gap:         0.045797
+    Status:      Good generalization
+
+  Target:        TERCAPAI (R² ≥ 0.85)
+
+BNI
+------------------------------------------------------------
+  Test Set Metrics:
+    MAE:         0.013970
+    RMSE:        0.021035
+    R² Score:    0.963176
+    MAPE:        inf%
+    Max Error:   0.103718
+    Mean Error:  0.001747
+    Std Error:   0.020962
+
+  Overfitting Analysis:
+    Train R²:    0.999110
+    Test R²:     0.963176
+    Gap:         0.035934
+    Status:      Good generalization
+
+  Target:        TERCAPAI (R² ≥ 0.85)
+
+BTN
+------------------------------------------------------------
+  Test Set Metrics:
+    MAE:         0.022059
+    RMSE:        0.031602
+    R² Score:    0.977267
+    MAPE:        inf%
+    Max Error:   0.105578
+    Mean Error:  0.000648
+    Std Error:   0.031596
+
+  Overfitting Analysis:
+    Train R²:    0.998531
+    Test R²:     0.977267
+    Gap:         0.021264
+    Status:      Good generalization
+
+  Target:        TERCAPAI (R² ≥ 0.85)
+
+================================================================================
+4. TEMUAN UTAMA
+================================================================================
+
+Best Performer:  BRI (R² = 0.979374)
+Worst Performer: Mandiri (R² = 0.953284)
+
+Kualitas Model Secara Keseluruhan:
+  EXCELLENT - Average R² exceeds target
+
+================================================================================
+5. REKOMENDASI
+================================================================================
+
+================================================================================
+AKHIR LAPORAN
+================================================================================

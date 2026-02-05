@@ -1,0 +1,153 @@
+================================================================================
+LAPORAN ANALISIS FEATURE IMPORTANCE
+Random Forest Regression - Prediksi Harga Saham
+================================================================================
+
+Generated: 2026-02-05 03:29:12
+
+================================================================================
+1. RINGKASAN
+================================================================================
+Total Features Analyzed: 20
+Banks Analyzed: BCA, BRI, Mandiri, BNI, BTN
+
+================================================================================
+2. 10 FITUR TERPENTING (KESELURUHAN)
+================================================================================
+
+1. Low
+   Average Importance: 0.477118
+   Std Deviation: 0.247956
+   Range: [0.175382, 0.761528]
+   Top 5 in: BCA, BRI, Mandiri, BNI, BTN
+
+2. High
+   Average Importance: 0.367851
+   Std Deviation: 0.217516
+   Range: [0.184986, 0.735693]
+   Top 5 in: BCA, BRI, Mandiri, BNI, BTN
+
+3. EMA_5
+   Average Importance: 0.040411
+   Std Deviation: 0.073573
+   Range: [0.000330, 0.171520]
+   Top 5 in: BCA, BRI, Mandiri, BNI, BTN
+
+4. Open
+   Average Importance: 0.027709
+   Std Deviation: 0.048501
+   Range: [0.000017, 0.113757]
+   Top 5 in: BCA, BRI, BTN
+
+5. EMA_10
+   Average Importance: 0.017154
+   Std Deviation: 0.034291
+   Range: [0.000088, 0.078254]
+   Top 5 in: BCA
+
+6. SMA_5
+   Average Importance: 0.014958
+   Std Deviation: 0.029744
+   Range: [0.000036, 0.068070]
+   Top 5 in: BRI, BNI
+
+7. SMA_10
+   Average Importance: 0.012721
+   Std Deviation: 0.024933
+   Range: [0.000016, 0.057061]
+
+8. SMA_20
+   Average Importance: 0.011306
+   Std Deviation: 0.018382
+   Range: [0.000005, 0.042360]
+
+9. BB_Lower
+   Average Importance: 0.010779
+   Std Deviation: 0.020785
+   Range: [0.000006, 0.047674]
+
+10. BB_Middle
+   Average Importance: 0.005437
+   Std Deviation: 0.008418
+   Range: [0.000005, 0.019231]
+
+================================================================================
+3. ANALISIS KATEGORI FITUR
+================================================================================
+
+BBRI:
+   Total Importance: 0.125000
+   Percentage: 20.00%
+
+BBCA:
+   Total Importance: 0.125000
+   Percentage: 20.00%
+
+BMRI:
+   Total Importance: 0.125000
+   Percentage: 20.00%
+
+BBTN:
+   Total Importance: 0.125000
+   Percentage: 20.00%
+
+BBNI:
+   Total Importance: 0.125000
+   Percentage: 20.00%
+
+================================================================================
+4. ANALISIS KONSISTENSI
+================================================================================
+
+Fitur-fitur yang muncul di Top 10 untuk semua bank:
+  • Low (Avg: 0.477118)
+  • High (Avg: 0.367851)
+  • EMA_5 (Avg: 0.040411)
+
+================================================================================
+5. TEMUAN & REKOMENDASI ​​UTAMA
+================================================================================
+
+• Kategori Paling Penting: BBRI (20.0%)
+
+• Potensi Pengurangan Fitur:
+  - 1 fitur-fitur tersebut mencakup 80% dari hal-hal penting.
+  - Dapat mengurangi rangkaian fitur dari 20 sampai ~1
+
+• Rekomendasi:
+  1. Fokus di atas 1 fitur untuk iterasi model di masa mendatang
+  2. Pertimbangkan untuk menghapus fitur-fitur yang kurang penting (<1% kontribusi)
+  3. BBRI Fitur-fitur harus diprioritaskan dalam pengumpulan data.
+
+================================================================================
+6. 3 FITUR UTAMA KHUSUS BANK
+================================================================================
+
+BCA:
+  1. High: 0.184986 (18.50%)
+  2. Low: 0.175382 (17.54%)
+  3. EMA_5: 0.171520 (17.15%)
+
+BRI:
+  1. Low: 0.614103 (61.41%)
+  2. High: 0.360547 (36.05%)
+  3. Open: 0.010516 (1.05%)
+
+Mandiri:
+  1. High: 0.735693 (73.57%)
+  2. Low: 0.262253 (26.23%)
+  3. Daily_Return: 0.000664 (0.07%)
+
+BNI:
+  1. Low: 0.761528 (76.15%)
+  2. High: 0.230699 (23.07%)
+  3. EMA_5: 0.003358 (0.34%)
+
+BTN:
+  1. Low: 0.572327 (57.23%)
+  2. High: 0.327330 (32.73%)
+  3. EMA_5: 0.017031 (1.70%)
+
+================================================================================
+LAPORAN AKHIR
+================================================================================
