@@ -139,6 +139,24 @@ elif menu == "2. Prapemrosesan Data":
     # --- TAB 1: DATA CLEANING ---
     with tab1:
         st.subheader("Pembersihan Data (Data Cleaning)")
+        
+        # Menampilkan Hasil Eksplorasi Data Awal dari Colab
+        if s:
+            st.markdown(f"**Hasil Eksplorasi Data Awal: {bank_pilihan}**")
+            col_info1, col_info2, col_info3 = st.columns(3)
+            with col_info1:
+                st.metric("Dimensi Data", s.get('shape', 'N/A'))
+            with col_info2:
+                st.metric("Total Duplikat", s.get('duplicates', 0))
+            with col_info3:
+                st.metric("Missing Values", s.get('missing_values', 0))
+            
+            with st.expander("Lihat Statistik Deskriptif Mentah"):
+                # Menampilkan deskripsi statistik jika tersedia di JSON
+                if 'desc_stats' in s:
+                    st.write(pd.DataFrame(s['desc_stats']))
+        
+        st.divider()
         st.markdown("""
         Tahap ini bertujuan memastikan integritas data deret waktu sebelum dilakukan perhitungan indikator.
         * **Pengecekan Missing Values**: Mengidentifikasi kekosongan data akibat hari libur bursa.
