@@ -41,7 +41,7 @@ st.sidebar.title("Menu Navigasi")
 menu = st.sidebar.radio("Pilih Tahapan Implementasi:", [
     "0. Ringkasan Proyek",
     "1. Pengumpulan Data",
-    "2. Prapemrosesan & Fitur",
+    "2. Prapemrosesan Data",
     "3. Evaluasi Performa Model",
     "4. Analisis Feature Importance",
     "5. Demo Prediksi Real-time"
@@ -125,14 +125,57 @@ elif menu == "1. Pengumpulan Data":
         """)
 
 # MENU 2: PRAPEMROSESAN
-elif menu == "2. Prapemrosesan & Fitur":
-    st.header("Tahap 2 & 3: Preprocessing & Feature Engineering")
-    st.markdown("""
-    - **Cleaning**: Penanganan missing values (ffill & bfill).
-    - **Features**: Ekstraksi 22 Indikator Teknikal (SMA, EMA, RSI, MACD, dll).
-    - **Scaling**: MinMaxScaler (Range 0-1) untuk stabilitas algoritma Random Forest.
-    """)
-    st.image(f"Visual/03_Technical_Indicators_{bank_pilihan}.png", caption=f"Indikator Teknikal yang Dihasilkan untuk {bank_pilihan}")
+elif menu == "2. Prapemrosesan Data":
+    st.header("⚙️ Tahap 2 & 3: Prapemrosesan & Rekayasa Fitur")
+    
+    # Membagi menjadi 3 Tab sesuai alur kerja tim
+    tab1, tab2, tab3 = st.tabs(["1. Data Cleaning & Feature Engineering", "2. Normalisasi (Scaling)", "3. Data Splitting"])
+    
+    with tab1:
+        st.subheader("Pembersihan Data & Ekstraksi Fitur Teknikal")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("""
+            **Proses Pembersihan (Cleaning):**
+            * **Pengecekan Nilai Kosong**: Mengidentifikasi data yang hilang pada dataset mentah.
+            * **Imputasi**: Mengisi nilai kosong menggunakan metode `ffill` (forward fill) dan `bfill` (backward fill) untuk menjaga kontinuitas deret waktu.
+            * **Drop Unused**: Menghapus kolom yang tidak relevan seperti `Adj Close` agar model fokus pada harga transaksi utama.
+            """)
+        with col2:
+            st.markdown("""
+            **Rekayasa Fitur (22 Indikator):**
+            * **Trend**: SMA & EMA (periode 5, 10, 20) untuk menangkap arah pergerakan harga.
+            * **Momentum**: RSI & MACD untuk mengukur kekuatan tren.
+            * **Volatility**: Bollinger Bands & HL Range untuk memantau batasan fluktuasi harga.
+            """)
+        
+        st.info(f"Menampilkan hasil ekstraksi 22 indikator teknikal untuk {bank_pilihan}")
+        st.image(f"Visual/03_Technical_Indicators_{bank_pilihan}.png", use_container_width=True)
+
+    with tab2:
+        st.subheader("Normalisasi Data dengan MinMaxScaler")
+        st.markdown("""
+        Karena rentang nilai antara **Harga Saham** (ribuan) dan **Volume** (jutaan) sangat jauh berbeda, dilakukan normalisasi:
+        * **Metode**: MinMaxScaler.
+        * **Rentang**: Mengubah seluruh nilai fitur ke dalam skala **0 hingga 1**.
+        * **Pentingnya Scaling**: Mencegah fitur dengan angka besar mendominasi proses pembelajaran model *Random Forest*.
+        """)
+        
+        # Menampilkan visual scaling yang telah Anda buat
+        st.image("Visual/06_Scaling_Comparison.png", caption="Perbandingan Data Sebelum dan Sesudah MinMaxScaler", use_container_width=True)
+
+    with tab3:
+        st.subheader("Data Splitting (Train-Test Split)")
+        st.markdown("""
+        Dataset dibagi menjadi dua bagian utama untuk memastikan model dapat melakukan generalisasi dengan baik:
+        * **Rasio Pembagian**: **80% untuk Training** (Pelatihan) dan **20% untuk Testing** (Pengujian).
+        * **Metode**: *Time-series splitting* (Data diurutkan berdasarkan waktu, tidak diacak/shuffle) untuk menjaga integritas data deret waktu.
+        """)
+        
+        # Menampilkan visual splitting
+        st.image("Visual/08_Train_Test_Split.png", caption="Visualisasi Pembagian Data Pelatihan (80%) dan Pengujian (20%)", use_container_width=True)
+        
+        st.warning("Catatan: Data Test (20% terakhir) digunakan sebagai simulasi data 'masa depan' yang tidak pernah dilihat model saat pelatihan.")
 
 # MENU 3: EVALUASI PERFORMA
 elif menu == "3. Evaluasi Performa Model":
