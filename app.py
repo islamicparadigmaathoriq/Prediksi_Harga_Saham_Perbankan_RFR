@@ -262,18 +262,81 @@ elif menu == "2. Prapemrosesan Data":
     with tab4:
         st.subheader("Pembagian Data Training & Testing")
         st.markdown("""
-        Pemisahan data dilakukan secara kronologis untuk menghindari *Data Leakage*.
-        * **Rasio**: **80% Training Set** (Data Historis Lama) dan **20% Testing Set** (Data Baru).
-        * **Konsep Time Series Split**: Tidak dilakukan pengacakan (*shuffle*) agar model belajar memprediksi masa depan berdasarkan urutan waktu masa lalu yang benar.
+        Pemisahan data dilakukan menggunakan metode **Time-Series Split**. Berbeda dengan *Random Split*, metode ini mempertahankan urutan kronologis untuk mencegah **Data Leakage** (model belajar dari masa depan).
         """)
+
+        # Dokumentasi Kode Splitting
+        with st.expander("Lihat Logika Kode Time-Series Split"):
+            st.code("""
+        def time_series_split(df, train_ratio=0.8):
+            # Hitung index split berdasarkan rasio 80%
+            split_index = int(len(df) * train_ratio)
+
+            # Split data secara kronologis (bukan acak)
+            train_df = df.iloc[:split_index].copy()
+            test_df = df.iloc[split_index:].copy()
+            
+            return train_df, test_df, split_date
+                    """, language='python')
         
+        # Ringkasan Split InformatioN
+        if s and 'split_details' in s:
+            sd = s['split_details']
+            st.info(f"**Informasi Split: {bank_pilihan}**")
+            c_split1, c_split2, c_split3 = st.columns(3)
+            c_split1.metric("Tanggal Split", sd['split_date'])
+            c_split2.metric("Data Latih (Train)", f"{sd['train_rows']} Baris", sd['train_pct'])
+            c_split3.metric("Data Uji (Test)", f"{sd['test_rows']} Baris", sd['test_pct'])
+        
+        st.divider()
+
+        # Visualisasi Area Split
         img_06 = "Visual/06_Visualisasi_Pembagian_Pelatihan_Uji.png"
         if os.path.exists(img_06):
-            st.image(img_06, caption="Interpretasi: Area hijau (Train) digunakan untuk membangun model, area oranye (Test) digunakan untuk validasi akurasi akhir.", use_container_width=True)
+            st.image(img_06, caption="Interpretasi: Area hijau (80%) adalah data historis untuk pelatihan, area oranye (20%) adalah data simulasi masa depan untuk pengujian.")
+
+        st.divider()
+
+        # Statistik Train vs Test Set (Sesuai Image 2 Anda)
+        st.subheader("Perbandingan Statistik Train vs Test")
+        if 'split_stats' in s:
+            ss = s['split_stats']
+            
+            # Tabel Komparasi Close Price
+            st.markdown("**Statistik Harga Penutupan (Close):**")
+            close_stats = pd.DataFrame({
+                'Metric': ['Mean (Rata-rata)', 'Std Dev (Standar Deviasi)'],
+                'Train Set': [ss['Close']['Train Mean'], ss['Close']['Train Std']],
+                'Test Set': [ss['Close']['Test Mean'], ss['Close']['Test Std']]
+            })
+            st.table(close_stats.style.format("{:.6f}", subset=['Train Set', 'Test Set']))
+
+            # Tampilan Distribusi
+            img_07 = f"Visual/07_Distribusi_Uji_Pelatihan_{bank_pilihan}.png"
+            if os.path.exists(img_07):
+                st.image(img_07, caption=f"Distribusi Fitur pada Data Train vs Test: {bank_pilihan}")
         
-        img_07 = f"Visual/07_Distribusi_Uji_Pelatihan_{bank_pilihan}.png"
-        if os.path.exists(img_07):
-            st.image(img_07, caption=f"Interpretasi: Menjamin distribusi data pelatihan dan pengujian tetap konsisten untuk {bank_pilihan}.")
+        st.divider()
+
+        # Ringkasan Global (Summary DF)
+        st.subheader("Ringkasan Global Semua Bank")
+        summary_list = []
+        for ticker, data in summary_data.items():
+            if 'split_details' in data:
+                d = data['split_details']
+                summary_list.append({
+                    'Bank': ticker,
+                    'Total Rows': d['total_rows'],
+                    'Train Rows': d['train_rows'],
+                    'Test Rows': d['test_rows'],
+                    'Train %': d['train_pct'],
+                    'Test %': d['test_pct'],
+                    'Split Date': d['split_date']
+                })
+        
+        if summary_list:
+            st.dataframe(pd.DataFrame(summary_list), use_container_width=True)
+            st.caption("Rata-rata global pembagian data berada pada rasio 80% Train dan 20% Test sesuai standar evaluasi time-series.")
 
 # MENU 3: EVALUASI PERFORMA
 elif menu == "3. Evaluasi Performa Model":
