@@ -16,14 +16,6 @@
         "avg_volume": "92,611,552",
         "duplicates": 0,
         "missing_values": 0,
-        "missing_detail": {
-            "Date": 0,
-            "Close": 0,
-            "High": 0,
-            "Low": 0,
-            "Open": 0,
-            "Volume": 0
-        },
         "desc_stats": {
             "Open": {
                 "count": 716.0,
@@ -136,6 +128,26 @@
                 "min": 0.0,
                 "max": 1.0
             }
+        },
+        "split_details": {
+            "total_rows": 697,
+            "train_rows": 557,
+            "test_rows": 140,
+            "train_pct": "79.9%",
+            "test_pct": "20.1%",
+            "split_date": "2025-03-11"
+        },
+        "split_stats": {
+            "Close": {
+                "Train Mean": 0.4979019967633201,
+                "Test Mean": 0.35468692550551584,
+                "Train Std": 0.21820013230769056,
+                "Test Std": 0.16849608924977935
+            },
+            "Volume": {
+                "Train Mean": 0.09590651794742378,
+                "Test Mean": 0.1663765949098696
+            }
         }
     },
     "BBRI": {
@@ -155,14 +167,6 @@
         "avg_volume": "198,329,519",
         "duplicates": 0,
         "missing_values": 0,
-        "missing_detail": {
-            "Date": 0,
-            "Close": 0,
-            "High": 0,
-            "Low": 0,
-            "Open": 0,
-            "Volume": 0
-        },
         "desc_stats": {
             "Open": {
                 "count": 716.0,
@@ -275,6 +279,26 @@
                 "min": 0.0,
                 "max": 1.0
             }
+        },
+        "split_details": {
+            "total_rows": 697,
+            "train_rows": 557,
+            "test_rows": 140,
+            "train_pct": "79.9%",
+            "test_pct": "20.1%",
+            "split_date": "2025-03-11"
+        },
+        "split_stats": {
+            "Close": {
+                "Train Mean": 0.48254856927021605,
+                "Test Mean": 0.27222508755865943,
+                "Train Std": 0.18708580855207818,
+                "Test Std": 0.09009818964386135
+            },
+            "Volume": {
+                "Train Mean": 0.16270425012368367,
+                "Test Mean": 0.190566617988502
+            }
         }
     },
     "BMRI": {
@@ -294,14 +318,6 @@
         "avg_volume": "120,862,368",
         "duplicates": 0,
         "missing_values": 0,
-        "missing_detail": {
-            "Date": 0,
-            "Close": 0,
-            "High": 0,
-            "Low": 0,
-            "Open": 0,
-            "Volume": 0
-        },
         "desc_stats": {
             "Open": {
                 "count": 716.0,
@@ -414,6 +430,26 @@
                 "min": 0.0,
                 "max": 0.9999999999999999
             }
+        },
+        "split_details": {
+            "total_rows": 697,
+            "train_rows": 557,
+            "test_rows": 140,
+            "train_pct": "79.9%",
+            "test_pct": "20.1%",
+            "split_date": "2025-03-11"
+        },
+        "split_stats": {
+            "Close": {
+                "Train Mean": 0.4953287020990882,
+                "Test Mean": 0.3345703267176061,
+                "Train Std": 0.25389732345333604,
+                "Test Std": 0.1095321043773921
+            },
+            "Volume": {
+                "Train Mean": 0.13130458752725316,
+                "Test Mean": 0.23046078044153984
+            }
         }
     },
     "BBNI": {
@@ -433,14 +469,6 @@
         "avg_volume": "58,789,619",
         "duplicates": 0,
         "missing_values": 0,
-        "missing_detail": {
-            "Date": 0,
-            "Close": 0,
-            "High": 0,
-            "Low": 0,
-            "Open": 0,
-            "Volume": 0
-        },
         "desc_stats": {
             "Open": {
                 "count": 716.0,
@@ -553,6 +581,26 @@
                 "min": 0.0,
                 "max": 0.9999999999999999
             }
+        },
+        "split_details": {
+            "total_rows": 697,
+            "train_rows": 557,
+            "test_rows": 140,
+            "train_pct": "79.9%",
+            "test_pct": "20.1%",
+            "split_date": "2025-03-11"
+        },
+        "split_stats": {
+            "Close": {
+                "Train Mean": 0.46442601148059615,
+                "Test Mean": 0.36965501586615407,
+                "Train Std": 0.22516593013533914,
+                "Test Std": 0.11000759417877716
+            },
+            "Volume": {
+                "Train Mean": 0.16589767734603947,
+                "Test Mean": 0.19771519303533158
+            }
         }
     },
     "BBTN": {
@@ -572,14 +620,6 @@
         "avg_volume": "30,237,954",
         "duplicates": 0,
         "missing_values": 0,
-        "missing_detail": {
-            "Date": 0,
-            "Close": 0,
-            "High": 0,
-            "Low": 0,
-            "Open": 0,
-            "Volume": 0
-        },
         "desc_stats": {
             "Open": {
                 "count": 716.0,
@@ -691,6 +731,26 @@
             "MACD": {
                 "min": 0.0,
                 "max": 1.0
+            }
+        },
+        "split_details": {
+            "total_rows": 697,
+            "train_rows": 557,
+            "test_rows": 140,
+            "train_pct": "79.9%",
+            "test_pct": "20.1%",
+            "split_date": "2025-03-11"
+        },
+        "split_stats": {
+            "Close": {
+                "Train Mean": 0.5759763287710248,
+                "Test Mean": 0.5279545669622674,
+                "Train Std": 0.14224343816984106,
+                "Test Std": 0.21035302663918226
+            },
+            "Volume": {
+                "Train Mean": 0.1191201218120365,
+                "Test Mean": 0.16955816370595975
             }
         }
     }
