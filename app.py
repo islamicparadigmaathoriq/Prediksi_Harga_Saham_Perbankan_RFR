@@ -125,57 +125,82 @@ elif menu == "1. Pengumpulan Data":
         """)
 
 # MENU 2: PRAPEMROSESAN
-elif menu == "2. Prapemrosesan Data":
-    st.header("⚙️ Tahap 2 & 3: Prapemrosesan & Rekayasa Fitur")
+elif menu == "2. Prapemrosesan & Fitur":
+    st.header("Tahap 2: Prapemrosesan & Rekayasa Fitur")
     
-    # Membagi menjadi 3 Tab sesuai alur kerja tim
-    tab1, tab2, tab3 = st.tabs(["1. Data Cleaning & Feature Engineering", "2. Normalisasi (Scaling)", "3. Data Splitting"])
+    # Membagi menjadi 4 Tab sesuai alur kerja teknis
+    tab1, tab2, tab3, tab4 = st.tabs([
+        "1. Data Cleaning", 
+        "2. Feature Engineering", 
+        "3. Normalisasi (Scaling)", 
+        "4. Data Splitting"
+    ])
     
+    # --- TAB 1: DATA CLEANING ---
     with tab1:
-        st.subheader("Pembersihan Data & Ekstraksi Fitur Teknikal")
+        st.subheader("Pembersihan Data (Cleaning)")
+        st.markdown("""
+        Proses awal untuk memastikan integritas data deret waktu:
+        * **Penanganan Missing Values**: Menggunakan teknik `ffill` dan `bfill` untuk mengisi kekosongan data akibat hari libur bursa atau anomali.
+        * **Seleksi Kolom**: Menghapus kolom `Adj Close` dan fokus pada kolom harga utama.
+        """)
+        
+        img_02 = "Visual/02_Komparasi_Data_Cleaning.png"
+        if os.path.exists(img_02):
+            st.image(img_02, caption="Visualisasi menunjukkan data sebelum cleaning memiliki gap/nilai kosong, sedangkan setelah cleaning data menjadi kontinu dan siap diproses.", use_container_width=True)
+        else:
+            st.error(f"File {img_02} tidak ditemukan.")
+
+    # --- TAB 2: FEATURE ENGINEERING ---
+    with tab2:
+        st.subheader("Ekstraksi 22 Indikator Teknikal")
+        st.markdown("""
+        Menambahkan variabel baru untuk menangkap pola pasar:
+        * **Trend**: SMA & EMA (5, 10, 20).
+        * **Momentum**: RSI & MACD.
+        * **Volatility**: Bollinger Bands & HL Range.
+        """)
+        
+        img_03 = f"Visual/03_Technical_Indicators_{bank_pilihan}.png"
+        if os.path.exists(img_03):
+            st.image(img_03, caption=f"IGabungan indikator harian untuk {bank_pilihan} memberikan informasi lebih dalam kepada model dibanding hanya menggunakan harga tunggal.", use_container_width=True)
+        else:
+            st.error(f"File {img_03} tidak ditemukan.")
+
+    # --- TAB 3: NORMALISASI ---
+    with tab3:
+        st.subheader("Normalisasi dengan MinMaxScaler")
+        st.markdown("""
+        Menyamakan skala data agar fitur dengan angka besar (Volume) tidak mendominasi fitur kecil (Harga):
+        * **Metode**: Transformasi linear ke rentang **0 hingga 1**.
+        """)
+        
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown("""
-            **Proses Pembersihan (Cleaning):**
-            * **Pengecekan Nilai Kosong**: Mengidentifikasi data yang hilang pada dataset mentah.
-            * **Imputasi**: Mengisi nilai kosong menggunakan metode `ffill` (forward fill) dan `bfill` (backward fill) untuk menjaga kontinuitas deret waktu.
-            * **Drop Unused**: Menghapus kolom yang tidak relevan seperti `Adj Close` agar model fokus pada harga transaksi utama.
-            """)
+            img_04 = "Visual/04_Perbandingan_Normalisasi.png"
+            if os.path.exists(img_04):
+                st.image(img_04, caption="Terlihat perbedaan distribusi data mentah yang lebar menjadi terkumpul dalam rentang 0-1.")
         with col2:
-            st.markdown("""
-            **Rekayasa Fitur (22 Indikator):**
-            * **Trend**: SMA & EMA (periode 5, 10, 20) untuk menangkap arah pergerakan harga.
-            * **Momentum**: RSI & MACD untuk mengukur kekuatan tren.
-            * **Volatility**: Bollinger Bands & HL Range untuk memantau batasan fluktuasi harga.
-            """)
-        
-        st.info(f"Menampilkan hasil ekstraksi 22 indikator teknikal untuk {bank_pilihan}")
-        st.image(f"Visual/03_Technical_Indicators_{bank_pilihan}.png", use_container_width=True)
+            img_05 = f"Visual/05_Distribusi_Setelah_Normalisasi.png"
+            if os.path.exists(img_05):
+                st.image(img_05, caption=f"Distribusi Normalisasi: {bank_pilihan}")
 
-    with tab2:
-        st.subheader("Normalisasi Data dengan MinMaxScaler")
+    # --- TAB 4: DATA SPLITTING ---
+    with tab4:
+        st.subheader("Pembagian Data Training & Testing")
         st.markdown("""
-        Karena rentang nilai antara **Harga Saham** (ribuan) dan **Volume** (jutaan) sangat jauh berbeda, dilakukan normalisasi:
-        * **Metode**: MinMaxScaler.
-        * **Rentang**: Mengubah seluruh nilai fitur ke dalam skala **0 hingga 1**.
-        * **Pentingnya Scaling**: Mencegah fitur dengan angka besar mendominasi proses pembelajaran model *Random Forest*.
+        Memisahkan data untuk melatih model dan menguji validitasnya:
+        * **Proporsi**: **80% Pelatihan** dan **20% Pengujian**.
+        * **Metode**: *Time-series Split* (Tanpa pengacakan) untuk mempertahankan urutan kronologis transaksi.
         """)
         
-        # Menampilkan visual scaling yang telah Anda buat
-        st.image("Visual/06_Scaling_Comparison.png", caption="Perbandingan Data Sebelum dan Sesudah MinMaxScaler", use_container_width=True)
-
-    with tab3:
-        st.subheader("Data Splitting (Train-Test Split)")
-        st.markdown("""
-        Dataset dibagi menjadi dua bagian utama untuk memastikan model dapat melakukan generalisasi dengan baik:
-        * **Rasio Pembagian**: **80% untuk Training** (Pelatihan) dan **20% untuk Testing** (Pengujian).
-        * **Metode**: *Time-series splitting* (Data diurutkan berdasarkan waktu, tidak diacak/shuffle) untuk menjaga integritas data deret waktu.
-        """)
+        img_06 = "Visual/06_Visualisasi_Pembagian_Pelatihan_Uji.png"
+        if os.path.exists(img_06):
+            st.image(img_06, caption="Area hijau menunjukkan data yang dipelajari model, sedangkan area oranye adalah 'ujian' untuk model.", use_container_width=True)
         
-        # Menampilkan visual splitting
-        st.image("Visual/08_Train_Test_Split.png", caption="Visualisasi Pembagian Data Pelatihan (80%) dan Pengujian (20%)", use_container_width=True)
-        
-        st.warning("Catatan: Data Test (20% terakhir) digunakan sebagai simulasi data 'masa depan' yang tidak pernah dilihat model saat pelatihan.")
+        img_07 = f"Visual/07_Distribusi_Uji_Pelatihan_{bank_pilihan}.png"
+        if os.path.exists(img_07):
+            st.image(img_07, caption=f"Distribusi Pelatihan vs Uji: {bank_pilihan}")
 
 # MENU 3: EVALUASI PERFORMA
 elif menu == "3. Evaluasi Performa Model":
