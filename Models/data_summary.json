@@ -1,1 +1,87 @@
-{}
+{
+    "BBCA": {
+        "file": "BBCA_raw.csv",
+        "rows": 716,
+        "columns": [
+            "Date",
+            "Close",
+            "High",
+            "Low",
+            "Open",
+            "Volume"
+        ],
+        "date_range": "2022-10-17 \u2192 2025-10-16",
+        "price_range": "Rp 7,202 - Rp 10,501",
+        "avg_volume": "92,611,552",
+        "missing_values": 0,
+        "status": "OK"
+    },
+    "BBRI": {
+        "file": "BBRI_raw.csv",
+        "rows": 716,
+        "columns": [
+            "Date",
+            "Close",
+            "High",
+            "Low",
+            "Open",
+            "Volume"
+        ],
+        "date_range": "2022-10-17 \u2192 2025-10-16",
+        "price_range": "Rp 3,061 - Rp 5,554",
+        "avg_volume": "198,329,519",
+        "missing_values": 0,
+        "status": "OK"
+    },
+    "BMRI": {
+        "file": "BMRI_raw.csv",
+        "rows": 716,
+        "columns": [
+            "Date",
+            "Close",
+            "High",
+            "Low",
+            "Open",
+            "Volume"
+        ],
+        "date_range": "2022-10-17 \u2192 2025-10-16",
+        "price_range": "Rp 3,607 - Rp 6,635",
+        "avg_volume": "120,862,368",
+        "missing_values": 0,
+        "status": "OK"
+    },
+    "BBNI": {
+        "file": "BBNI_raw.csv",
+        "rows": 716,
+        "columns": [
+            "Date",
+            "Close",
+            "High",
+            "Low",
+            "Open",
+            "Volume"
+        ],
+        "date_range": "2022-10-17 \u2192 2025-10-16",
+        "price_range": "Rp 3,414 - Rp 5,461",
+        "avg_volume": "58,789,619",
+        "missing_values": 0,
+        "status": "OK"
+    },
+    "BBTN": {
+        "file": "BBTN_raw.csv",
+        "rows": 716,
+        "columns": [
+            "Date",
+            "Close",
+            "High",
+            "Low",
+            "Open",
+            "Volume"
+        ],
+        "date_range": "2022-10-17 \u2192 2025-10-16",
+        "price_range": "Rp 725 - Rp 1,506",
+        "avg_volume": "30,237,954",
+        "missing_values": 0,
+        "status": "OK"
+    }
+}
