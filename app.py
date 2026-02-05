@@ -126,7 +126,7 @@ elif menu == "1. Pengumpulan Data":
 
 # MENU 2: PRAPEMROSESAN & FITUR
 elif menu == "2. Prapemrosesan Data":
-    st.header("⚙️ Tahap 2 - 5: Prapemrosesan & Rekayasa Fitur")
+    st.header("Tahap 2: Prapemrosesan & Rekayasa Fitur")
     
     # Membagi menjadi 4 Tab sesuai alur kerja teknis di dokumen
     tab1, tab2, tab3, tab4 = st.tabs([
@@ -191,21 +191,72 @@ elif menu == "2. Prapemrosesan Data":
     with tab3:
         st.subheader("Normalisasi dengan MinMaxScaler")
         st.markdown("""
-        Dilakukan transformasi data agar semua fitur berada dalam skala yang seragam.
-        * **Metode**: MinMaxScaler mengubah nilai menjadi rentang **0 hingga 1**.
-        * **Tujuan**: Mencegah fitur dengan angka nominal besar (seperti Volume di angka jutaan) mendominasi fitur dengan angka kecil (seperti RSI di angka 0-100) saat proses pelatihan model.
+        Proses ini menggunakan **MinMaxScaler** untuk menyamakan skala seluruh fitur ke dalam rentang **0 hingga 1**. 
+        Hal ini krusial karena model *Random Forest* akan lebih stabil jika fitur dengan angka besar (Volume) memiliki bobot yang setara dengan fitur angka kecil (Harga).
         """)
-        
-        col_norm1, col_norm2 = st.columns(2)
-        with col_norm1:
+
+        # Dokumentasi Kode Proses Normalisasi
+        with st.expander("Lihat Logika Kode Normalisasi"):
+            st.code("""
+            # Inisialisasi MinMaxScaler untuk rentang 0-1
+            scaler = MinMaxScaler(feature_range=(0, 1))
+
+            # Fit dan transform fitur teknikal
+            scaled_features = scaler.fit_transform(features_to_scale)
+
+            # Konversi kembali ke DataFrame dengan kolom yang sama
+            df_normalized = pd.DataFrame(
+                scaled_features,
+                columns=columns_to_normalize,
+                index=features_to_scale.index
+            )
+                        """, language='python')
+        # Tampilan Hasil Log Normalisasi (Sesuai Image 1 Anda)
+        if s:
+            st.info(f"**📈 Log Normalisasi: {bank_pilihan}**")
+            col_log1, col_log2 = st.columns(2)
+            with col_log1:
+                st.write("**Sebelum Normalisasi:**")
+                st.write(f"- Range Harga: {s.get('price_range')}")
+                st.write(f"- Status: Raw Data ditarik")
+            with col_log2:
+                # Mengambil data verifikasi dari JSON
+                v = s.get('norm_verification', {})
+                close_v = v.get('Close', {})
+                st.write("**Sesudah Normalisasi:**")
+                st.write(f"- Range Harga: {close_v.get('min', 0):.6f} - {close_v.get('max', 1):.6f}")
+                st.write(f"- Status: Berhasil (Range [0,1])")
+
+        st.divider()
+
+        # Visualisasi Perbandingan
+        col_img1, col_img2 = st.columns(2)
+        with col_img1:
             img_04 = "Visual/04_Perbandingan_Normalisasi.png"
             if os.path.exists(img_04):
-                st.image(img_04, caption="Interpretasi: Transformasi distribusi harga dari nilai nominal ke skala standar 0-1.")
-        
-        with col_norm2:
+                st.image(img_04, caption="Interpretasi: Transformasi distribusi data mentah yang lebar menjadi terkumpul dalam rentang standar 0-1.")
+        with col_img2:
             img_05 = f"Visual/05_Distribusi_Setelah_Normalisasi_{bank_pilihan}.png"
             if os.path.exists(img_05):
-                st.image(img_05, caption=f"Distribusi Normalisasi: {bank_pilihan}")
+                st.image(img_05, caption=f"Distribusi Setelah Normalisasi: {bank_pilihan}")
+
+        st.divider()
+
+        # Statistik Deskriptif Setelah Normalisasi (Sesuai Image 2 Anda)
+        st.subheader("Statistik Deskriptif & Verifikasi Range")
+        if 'norm_stats' in s:
+            st.write("Statistik fitur utama setelah scaling:")
+            st.table(pd.DataFrame(s['norm_stats']))
+            
+            # Verifikasi Range [0,1]
+            st.markdown("**Verifikasi Range [0, 1]:**")
+            v_cols = st.columns(4)
+            for i, (col_name, limits) in enumerate(s.get('norm_verification', {}).items()):
+                v_cols[i].caption(f"**{col_name}**")
+                v_cols[i].write(f"Min: {limits['min']:.6f}")
+                v_cols[i].write(f"Max: {limits['max']:.6f}")
+        else:
+            st.warning("Data statistik normalisasi belum tersedia di data_summary.json")
 
     # --- TAB 4: DATA SPLITTING ---
     with tab4:
