@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 import json
+import os
 import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime
@@ -9,23 +10,31 @@ from datetime import datetime
 # --- KONFIGURASI HALAMAN ---
 st.set_page_config(page_title="Seminar Hasil Kelompok 6", layout="wide")
 
-# --- FUNGSI LOAD DATA & METRIK ---
+# --- FUNGSI LOAD DATA OTOMATIS ---
 @st.cache_data
-def load_all_metrics():
-    # Membaca file JSON hasil perhitungan dari notebook
-    with open('Models/metrics.json', 'r') as f:
-        return json.load(f)
+def load_json_data(file_path):
+    # Memastikan file ada sebelum dibaca
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as f:
+            return json.load(f)
+    return {}
 
 # --- LOAD ASSETS (Pastikan folder & file ini ada di GitHub nanti) ---
 @st.cache_resource
 def load_model_assets(bank):
-    # Load model dan scaler sesuai struktur folder Anda
-    model = joblib.load(f"Models/Trained/{bank}_rf_model.pkl")
-    scaler = joblib.load(f"Models/Scalers/{bank}_scaler.pkl")
-    return model, scaler
+    # Load model dan scaler sesuai struktur folder
+    model_path = f"Models/Trained/{bank}_rf_model.pkl"
+    scaler_path = f"Models/Scalers/{bank}_scaler.pkl"
+    
+    if os.path.exists(model_path) and os.path.exists(scaler_path):
+        model = joblib.load(model_path)
+        scaler = joblib.load(scaler_path)
+        return model, scaler
+    return None, None
 
 # Inisialisasi data
-all_metrics = load_all_metrics()
+all_metrics = load_json_data('Models/metrics.json')
+summary_data = load_json_data('Models/data_summary.json')
 
 # --- SIDEBAR NAVIGASI ---
 st.sidebar.title("Menu Navigasi")
@@ -39,7 +48,11 @@ menu = st.sidebar.radio("Pilih Tahapan Implementasi:", [
 ])
 
 bank_pilihan = st.sidebar.selectbox("Pilih Bank Fokus:", ["BBCA", "BBRI", "BMRI", "BBNI", "BBTN"])
-m = all_metrics.get(bank_pilihan, all_metrics["BBCA"])
+
+# --- DATA BINDING ---
+# Ambil metrik performa dan ringkasan dataset sesuai pilihan bank
+m = all_metrics.get(bank_pilihan, {})
+s = summary_data.get(bank_pilihan, {})
 
 # --- KONTEN HALAMAN ---
 if menu == "0. Ringkasan Proyek":
@@ -52,16 +65,65 @@ if menu == "0. Ringkasan Proyek":
         st.write("- Memprediksi harga saham 5 bank besar (BCA, BRI, Mandiri, BNI, BTN).")
         st.write("- Mencapai akurasi R² Score ≥ 0.85.")
         st.write("- Mengidentifikasi fitur teknikal paling berpengaruh.")
-    with col2:
-        st.subheader(f"📈 Hasil Utama ({bank_pilihan})")
-        # Nilai ini sekarang otomatis dari metrics.json
-        st.success(f"R² Score: {m['r2']:.4f}")
-        st.write(f"Model {bank_pilihan} berhasil melampaui target akurasi dengan performa yang sangat stabil.")
+   with col2:
+        st.subheader(f"Hasil Utama ({bank_pilihan})")
+        if m:
+            st.success(f"R² Score: {m['r2']:.4f}")
+            st.write(f"Model {bank_pilihan} menunjukkan performa sangat akurat ditarik otomatis dari hasil riset.")
+        else:
+            st.warning("Data metrik belum tersedia. Pastikan metrics.json sudah di-upload.")
 
 elif menu == "1. Pengumpulan Data":
     st.header("Tahap 1: Pengumpulan Data Historis")
-    st.write("Data ditarik dari Yahoo Finance API (17 Okt 2022 - 17 Okt 2025).")
-    st.image("Visual/01_Analisis_Data_Mentah.png", caption="Tren Seluruh Saham Perbankan")
+    
+    # --- RESUME AKTIVITAS ---
+    st.subheader("Resume Aktivitas")
+    col_a, col_b = st.columns(2)
+    with col_a:
+        st.markdown("""
+        **Sumber Data & Periode:**
+        * **Sumber**: Yahoo Finance API (`yfinance`).
+        * **Periode**: 17 Oktober 2022 s/d 17 Oktober 2025 (3 Tahun).
+        """)
+    with col_b:
+        st.markdown("""
+        **Struktur Dataset Utama:**
+        * **Format**: CSV (`_raw.csv`).
+        * **Kolom**: `Date`, `Open`, `High`, `Low`, `Close`, `Adj Close`, `Volume`.
+        * **Penyimpanan**: Folder `Data/Raw/`.
+        """)
+
+    st.divider()
+
+    # Detail Dataset Otomatis
+    st.subheader(f"Detail Dataset: {bank_pilihan}")
+    if s:
+        st.code(f"""
+        File: {s['file']}
+        Rows: {s['rows']}
+        Columns: {s['columns']}
+        Date Range: {s['date_range']}
+        Rentang Harga: {s['price_range']}
+        Volume Rata-rata: {s['avg_volume']}
+        Missing Values: {s['missing_values']}
+        Status: {s['status']}
+        """)
+    else:
+        st.error("Metadata dataset tidak ditemukan. Pastikan data_summary.json sudah di-upload.")
+
+    # --- VISUALISASI ---
+    st.subheader("Visualisasi Data Mentah")
+    st.image("Visual/01_Analisis_Data_Mentah.png", use_container_width=True)
+    
+    # --- PENJELASAN GAMBAR ---
+    with st.expander("Penjelasan Detail Grafik"):
+        st.markdown(f"""
+       
+        * **Harga Penutupan (Closing Price)**: Grafik garis menunjukkan fluktuasi harga harian yang menjadi target prediksi utama model Random Forest.
+        * **Volume Perdagangan**: Menunjukkan likuiditas; volume tinggi pada titik tertentu seringkali berkorelasi dengan volatilitas harga.
+        * **Distribusi Harga**: Histogram menunjukkan persebaran harga untuk melihat konsentrasi nilai saham selama 3 tahun terakhir.
+        * **Harga Rata-rata**: Memberikan baseline untuk mengidentifikasi apakah tren saat ini berada di atas atau di bawah nilai historis rata-rata.
+        """)
 
 elif menu == "2. Prapemrosesan & Fitur":
     st.header("Tahap 2 & 3: Preprocessing & Feature Engineering")
