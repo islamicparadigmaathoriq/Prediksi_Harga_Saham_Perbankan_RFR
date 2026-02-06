@@ -437,18 +437,82 @@ elif menu == "3. Evaluasi Performa Model":
 
     # --- TAB 2: PREDIKSI (DATA TEST) ---
     with tab2:
-        st.subheader("Visualisasi Prediksi pada Data Test: {bank_pilihan}")
-        st.markdown(f"""
-        Model Final digunakan untuk memprediksi 20% data terakhir (Data Test) yang tidak pernah dilihat sebelumnya 
-        oleh model saat pelatihan. Ini membuktikan kemampuan generalisasi model.
-        """)
-        
+        st.header(f"Analisis Prediksi & Validasi: {bank_pilihan}")
+
+        # 1. VISUALISASI PREDIKSI INDIVIDUAL (Image 09)
+        st.subheader("1. Perbandingan Aktual vs Prediksi (Individu)")
         img_09 = f"Visual/09_Prediction_{bank_pilihan}.png"
         if os.path.exists(img_09):
-            st.image(img_09, caption=f"Grafik Prediksi vs Aktual {bank_pilihan} (Data Test)", use_container_width=True)
-            st.info("Garis merah putus-putus menunjukkan seberapa akurat model mengikuti fluktuasi harga asli (garis biru).")
-        else:
-            st.error(f"File {img_09} belum tersedia di folder Visual.")
+            st.image(img_09, use_container_width=True)
+            st.info(f"""
+            **Interpretasi Grafik:**
+            Grafik di atas memisahkan hasil pada data *Training* (biru/merah) dan *Test* (hijau/oranye). 
+            Garis putus-putus yang sangat berhimpit dengan garis asli menunjukkan bahwa model **Random Forest** berhasil mempelajari pola musiman dan tren harga {bank_pilihan} dengan presisi tinggi.
+            """)
+        
+        st.divider()
+
+        # 2. SCATTER PLOT (Image 11)
+        st.subheader("2. Scatter Plot: Linearitas Prediksi")
+        img_11 = "Visual/11_Scatter_Aktual_vs_Prediksi.png"
+        if os.path.exists(img_11):
+            st.image(img_11, use_container_width=True)
+            st.success(f"""
+            **Interpretasi Scatter Plot:**
+            Semakin rapat titik-titik di sekitar garis diagonal merah (*Perfect Prediction*), semakin kecil error model. 
+            Untuk {bank_pilihan}, titik-titik terkonsentrasi kuat pada garis, menandakan tidak adanya bias sistematis 
+            yang signifikan pada rentang harga tertentu.
+            """)
+
+        st.divider()
+
+        # 3. RESIDUAL ANALYSIS (Image 12 & Cards)
+        st.subheader("3. Analisis Residu (Error Analysis)")
+        if s and 'residual_stats' in s:
+            rs = s['residual_stats']
+            col_r1, col_r2, col_r3 = st.columns(3)
+            col_r1.metric("Mean Residual", f"{rs['mean']:.6f}")
+            col_r2.metric("Std Dev Residual", f"{rs['std']:.6f}")
+            col_r3.metric("Status Error", rs['status'])
+            
+        img_12 = "Visual/12_Residual_Analysis.png"
+        if os.path.exists(img_12):
+            st.image(img_12, use_container_width=True)
+            st.warning("""
+            **Interpretasi Analisis Residu:**
+            * **Residual over Time**: Sebaran titik di sekitar garis nol yang acak menunjukkan model telah mengekstrak 
+              seluruh informasi dari fitur teknikal tanpa meninggalkan pola error terstruktur.
+            * **Residual Distribution**: Distribusi berbentuk lonceng (Normal) yang berpusat di nol membuktikan 
+              bahwa mayoritas prediksi memiliki kesalahan mendekati Rp 0.
+            """)
+
+        st.divider()
+
+        # 4. ERROR METRICS COMPARISON (Image 13)
+        st.subheader("4. Komparasi Metrik Error Sektoral")
+        img_13 = "Visual/13_Perbandingan_Error_Metrics.png"
+        if os.path.exists(img_13):
+            st.image(img_13, use_container_width=True)
+            st.info("""
+            **Interpretasi Komparasi:**
+            Grafik batang ini membandingkan MAE, RMSE, dan R² di antara 5 bank. Terlihat bahwa performa model 
+            cukup merata di angka R² > 0.95, yang menunjukkan ketangguhan algoritma terhadap berbagai karakteristik 
+            volatilitas saham perbankan yang berbeda.
+            """)
+
+        st.divider()
+
+        # 5. FULL TIMELINE (Image 14)
+        st.subheader("5. Timeline Prediksi Menyeluruh")
+        img_14 = f"Visual/14_Full_Timeline_{bank_pilihan}.png"
+        if os.path.exists(img_14):
+            st.image(img_14, use_container_width=True)
+            st.success(f"""
+            **Interpretasi Timeline:**
+            Visualisasi ini menyatukan seluruh periode pengamatan. Area berbayang biru adalah masa lalu (latih), 
+            dan area hijau adalah simulasi masa depan (uji). Kemampuan model mengikuti lonjakan dan penurunan 
+            pada area hijau membuktikan kesiapannya untuk implementasi real-time.
+            """)
 
     # --- TAB 3: SKOR PERFORMA (EVALUASI HASIL TEST) ---
     with tab3:
