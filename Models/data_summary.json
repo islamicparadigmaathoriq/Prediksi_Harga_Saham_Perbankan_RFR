@@ -211,7 +211,141 @@
             "avg_rmse": 0.02407293629840382,
             "avg_r2": 0.9664805168636816,
             "avg_mape": Infinity,
-            "report_date": "2026-02-06 05:23:28"
+            "report_date": "2026-02-06 06:08:02"
+        },
+        "feature_importance": {
+            "top_10": [
+                {
+                    "Feature": "High",
+                    "Importance": 0.19031226214058214,
+                    "Percentage": 19.031226214058215
+                },
+                {
+                    "Feature": "Low",
+                    "Importance": 0.17714830259239797,
+                    "Percentage": 17.714830259239797
+                },
+                {
+                    "Feature": "EMA_5",
+                    "Importance": 0.17287197959422007,
+                    "Percentage": 17.287197959422006
+                },
+                {
+                    "Feature": "Open",
+                    "Importance": 0.11607125406775241,
+                    "Percentage": 11.607125406775241
+                },
+                {
+                    "Feature": "EMA_10",
+                    "Importance": 0.07359581262513051,
+                    "Percentage": 7.359581262513052
+                },
+                {
+                    "Feature": "SMA_5",
+                    "Importance": 0.06128660966630472,
+                    "Percentage": 6.128660966630472
+                },
+                {
+                    "Feature": "SMA_10",
+                    "Importance": 0.06005965828434749,
+                    "Percentage": 6.005965828434749
+                },
+                {
+                    "Feature": "BB_Lower",
+                    "Importance": 0.04611887433031068,
+                    "Percentage": 4.611887433031068
+                },
+                {
+                    "Feature": "SMA_20",
+                    "Importance": 0.04171082554646543,
+                    "Percentage": 4.171082554646543
+                },
+                {
+                    "Feature": "BB_Upper",
+                    "Importance": 0.02538347625050546,
+                    "Percentage": 2.538347625050546
+                }
+            ],
+            "top_5_contribution": 72.9999611020083,
+            "features_80_count": 6,
+            "categories": {
+                "Price": 0.48353181880073254,
+                "Volume": 0.001444142079671491,
+                "Simple Moving Average": 0.16305709349711764,
+                "Exponential Moving Average": 0.253703590566708,
+                "RSI": 0.002232110650241114,
+                "MACD": 0.0038392056371951023,
+                "Bollinger Bands": 0.08961261784148926,
+                "Other": 0.00257942092684483
+            }
+        },
+        "global_importance": {
+            "top_10_overall": [
+                {
+                    "Feature": "Low",
+                    "Average": 0.3954406324790211,
+                    "Std": 0.25843084336723077
+                },
+                {
+                    "Feature": "High",
+                    "Average": 0.3329034787917414,
+                    "Std": 0.23275400911883712
+                },
+                {
+                    "Feature": "EMA_5",
+                    "Average": 0.06767503942198284,
+                    "Std": 0.08437884326456122
+                },
+                {
+                    "Feature": "Open",
+                    "Average": 0.04904327448865128,
+                    "Std": 0.060959518621285416
+                },
+                {
+                    "Feature": "EMA_10",
+                    "Average": 0.03245655498275023,
+                    "Std": 0.041086991913656265
+                },
+                {
+                    "Feature": "SMA_5",
+                    "Average": 0.03106700978129242,
+                    "Std": 0.041439709569781595
+                },
+                {
+                    "Feature": "SMA_10",
+                    "Average": 0.02511116417419488,
+                    "Std": 0.03176862583037563
+                },
+                {
+                    "Feature": "SMA_20",
+                    "Average": 0.015147975655110108,
+                    "Std": 0.0172626944533282
+                },
+                {
+                    "Feature": "BB_Lower",
+                    "Average": 0.012245908687024253,
+                    "Std": 0.01932151216282971
+                },
+                {
+                    "Feature": "BB_Upper",
+                    "Average": 0.012240256159482418,
+                    "Std": 0.016703577739278535
+                }
+            ],
+            "most_consistent": [
+                "Low",
+                "High",
+                "EMA_5"
+            ],
+            "top_category": {
+                "name": "BBTN",
+                "percentage": 20.000000000000004
+            },
+            "reduction_potential": {
+                "from": 20,
+                "to": 3
+            },
+            "report_gen_date": "2026-02-06 06:08:02"
         }
     },
     "BBRI": {
@@ -426,7 +560,141 @@
             "avg_rmse": 0.02407293629840382,
             "avg_r2": 0.9664805168636816,
             "avg_mape": Infinity,
-            "report_date": "2026-02-06 05:23:28"
+            "report_date": "2026-02-06 06:08:02"
+        },
+        "feature_importance": {
+            "top_10": [
+                {
+                    "Feature": "Low",
+                    "Importance": 0.2040917642783281,
+                    "Percentage": 20.409176427832808
+                },
+                {
+                    "Feature": "High",
+                    "Importance": 0.1791821320745844,
+                    "Percentage": 17.91821320745844
+                },
+                {
+                    "Feature": "EMA_5",
+                    "Importance": 0.14568259029398886,
+                    "Percentage": 14.568259029398886
+                },
+                {
+                    "Feature": "Open",
+                    "Importance": 0.11502503585524826,
+                    "Percentage": 11.502503585524826
+                },
+                {
+                    "Feature": "SMA_5",
+                    "Importance": 0.08898034805383641,
+                    "Percentage": 8.898034805383642
+                },
+                {
+                    "Feature": "EMA_10",
+                    "Importance": 0.08091078495720477,
+                    "Percentage": 8.091078495720478
+                },
+                {
+                    "Feature": "SMA_10",
+                    "Importance": 0.059576142053262636,
+                    "Percentage": 5.957614205326264
+                },
+                {
+                    "Feature": "BB_Upper",
+                    "Importance": 0.03493233241733946,
+                    "Percentage": 3.493233241733946
+                },
+                {
+                    "Feature": "EMA_20",
+                    "Importance": 0.028384991398904522,
+                    "Percentage": 2.838499139890452
+                },
+                {
+                    "Feature": "SMA_20",
+                    "Importance": 0.02044001716357426,
+                    "Percentage": 2.044001716357426
+                }
+            ],
+            "top_5_contribution": 73.29618705559861,
+            "features_80_count": 5,
+            "categories": {
+                "Price": 0.49829893220816074,
+                "Volume": 0.0027964498703568624,
+                "Simple Moving Average": 0.1689965072706733,
+                "Exponential Moving Average": 0.25497836665009815,
+                "RSI": 0.0017844370209432862,
+                "MACD": 0.011666067839210594,
+                "Bollinger Bands": 0.05895327481064664,
+                "Other": 0.0025259643299102774
+            }
+        },
+        "global_importance": {
+            "top_10_overall": [
+                {
+                    "Feature": "Low",
+                    "Average": 0.3954406324790211,
+                    "Std": 0.25843084336723077
+                },
+                {
+                    "Feature": "High",
+                    "Average": 0.3329034787917414,
+                    "Std": 0.23275400911883712
+                },
+                {
+                    "Feature": "EMA_5",
+                    "Average": 0.06767503942198284,
+                    "Std": 0.08437884326456122
+                },
+                {
+                    "Feature": "Open",
+                    "Average": 0.04904327448865128,
+                    "Std": 0.060959518621285416
+                },
+                {
+                    "Feature": "EMA_10",
+                    "Average": 0.03245655498275023,
+                    "Std": 0.041086991913656265
+                },
+                {
+                    "Feature": "SMA_5",
+                    "Average": 0.03106700978129242,
+                    "Std": 0.041439709569781595
+                },
+                {
+                    "Feature": "SMA_10",
+                    "Average": 0.02511116417419488,
+                    "Std": 0.03176862583037563
+                },
+                {
+                    "Feature": "SMA_20",
+                    "Average": 0.015147975655110108,
+                    "Std": 0.0172626944533282
+                },
+                {
+                    "Feature": "BB_Lower",
+                    "Average": 0.012245908687024253,
+                    "Std": 0.01932151216282971
+                },
+                {
+                    "Feature": "BB_Upper",
+                    "Average": 0.012240256159482418,
+                    "Std": 0.016703577739278535
+                }
+            ],
+            "most_consistent": [
+                "Low",
+                "High",
+                "EMA_5"
+            ],
+            "top_category": {
+                "name": "BBTN",
+                "percentage": 20.000000000000004
+            },
+            "reduction_potential": {
+                "from": 20,
+                "to": 3
+            },
+            "report_gen_date": "2026-02-06 06:08:02"
         }
     },
     "BMRI": {
@@ -641,7 +909,141 @@
             "avg_rmse": 0.02407293629840382,
             "avg_r2": 0.9664805168636816,
             "avg_mape": Infinity,
-            "report_date": "2026-02-06 05:23:28"
+            "report_date": "2026-02-06 06:08:02"
+        },
+        "feature_importance": {
+            "top_10": [
+                {
+                    "Feature": "High",
+                    "Importance": 0.736021581168184,
+                    "Percentage": 73.6021581168184
+                },
+                {
+                    "Feature": "Low",
+                    "Importance": 0.26153010179954705,
+                    "Percentage": 26.153010179954713
+                },
+                {
+                    "Feature": "Daily_Return",
+                    "Importance": 0.0007387121185455029,
+                    "Percentage": 0.0738712118545503
+                },
+                {
+                    "Feature": "EMA_5",
+                    "Importance": 0.00031787291259714506,
+                    "Percentage": 0.03178729125971451
+                },
+                {
+                    "Feature": "Volume",
+                    "Importance": 0.0002335322769217978,
+                    "Percentage": 0.023353227692179783
+                },
+                {
+                    "Feature": "RSI",
+                    "Importance": 0.0002204586550367523,
+                    "Percentage": 0.022045865503675235
+                },
+                {
+                    "Feature": "MACD_Histogram",
+                    "Importance": 0.00020903772604932122,
+                    "Percentage": 0.020903772604932126
+                },
+                {
+                    "Feature": "MACD_Signal",
+                    "Importance": 0.00016651462521207874,
+                    "Percentage": 0.016651462521207878
+                },
+                {
+                    "Feature": "EMA_10",
+                    "Importance": 0.00010198408332567635,
+                    "Percentage": 0.010198408332567636
+                },
+                {
+                    "Feature": "Volume_MA",
+                    "Importance": 8.954529139681378e-05,
+                    "Percentage": 0.008954529139681379
+                }
+            ],
+            "top_5_contribution": 99.88418002757957,
+            "features_80_count": 1,
+            "categories": {
+                "Price": 0.9976073108628987,
+                "Volume": 0.0003230775683186116,
+                "Simple Moving Average": 8.02795291186338e-05,
+                "Exponential Moving Average": 0.00044869878457067295,
+                "RSI": 0.0002204586550367523,
+                "MACD": 0.0004429985871268941,
+                "Bollinger Bands": 7.985356422946473e-05,
+                "Other": 0.0007973224487002249
+            }
+        },
+        "global_importance": {
+            "top_10_overall": [
+                {
+                    "Feature": "Low",
+                    "Average": 0.3954406324790211,
+                    "Std": 0.25843084336723077
+                },
+                {
+                    "Feature": "High",
+                    "Average": 0.3329034787917414,
+                    "Std": 0.23275400911883712
+                },
+                {
+                    "Feature": "EMA_5",
+                    "Average": 0.06767503942198284,
+                    "Std": 0.08437884326456122
+                },
+                {
+                    "Feature": "Open",
+                    "Average": 0.04904327448865128,
+                    "Std": 0.060959518621285416
+                },
+                {
+                    "Feature": "EMA_10",
+                    "Average": 0.03245655498275023,
+                    "Std": 0.041086991913656265
+                },
+                {
+                    "Feature": "SMA_5",
+                    "Average": 0.03106700978129242,
+                    "Std": 0.041439709569781595
+                },
+                {
+                    "Feature": "SMA_10",
+                    "Average": 0.02511116417419488,
+                    "Std": 0.03176862583037563
+                },
+                {
+                    "Feature": "SMA_20",
+                    "Average": 0.015147975655110108,
+                    "Std": 0.0172626944533282
+                },
+                {
+                    "Feature": "BB_Lower",
+                    "Average": 0.012245908687024253,
+                    "Std": 0.01932151216282971
+                },
+                {
+                    "Feature": "BB_Upper",
+                    "Average": 0.012240256159482418,
+                    "Std": 0.016703577739278535
+                }
+            ],
+            "most_consistent": [
+                "Low",
+                "High",
+                "EMA_5"
+            ],
+            "top_category": {
+                "name": "BBTN",
+                "percentage": 20.000000000000004
+            },
+            "reduction_potential": {
+                "from": 20,
+                "to": 3
+            },
+            "report_gen_date": "2026-02-06 06:08:02"
         }
     },
     "BBNI": {
@@ -856,7 +1258,141 @@
             "avg_rmse": 0.02407293629840382,
             "avg_r2": 0.9664805168636816,
             "avg_mape": Infinity,
-            "report_date": "2026-02-06 05:23:28"
+            "report_date": "2026-02-06 06:08:02"
+        },
+        "feature_importance": {
+            "top_10": [
+                {
+                    "Feature": "Low",
+                    "Importance": 0.7600168239508339,
+                    "Percentage": 76.00168239508342
+                },
+                {
+                    "Feature": "High",
+                    "Importance": 0.23192292300048128,
+                    "Percentage": 23.192292300048134
+                },
+                {
+                    "Feature": "EMA_5",
+                    "Importance": 0.0034152361011895076,
+                    "Percentage": 0.3415236101189508
+                },
+                {
+                    "Feature": "Daily_Return",
+                    "Importance": 0.0019669079340784846,
+                    "Percentage": 0.1966907934078485
+                },
+                {
+                    "Feature": "SMA_5",
+                    "Importance": 0.0004402712430837413,
+                    "Percentage": 0.04402712430837414
+                },
+                {
+                    "Feature": "Open",
+                    "Importance": 0.00038907014798134553,
+                    "Percentage": 0.03890701479813456
+                },
+                {
+                    "Feature": "RSI",
+                    "Importance": 0.00018602509138312883,
+                    "Percentage": 0.01860250913831289
+                },
+                {
+                    "Feature": "Volume",
+                    "Importance": 0.00016856227830534283,
+                    "Percentage": 0.016856227830534285
+                },
+                {
+                    "Feature": "MACD_Signal",
+                    "Importance": 0.00016417484823387632,
+                    "Percentage": 0.016417484823387635
+                },
+                {
+                    "Feature": "HL_Range",
+                    "Importance": 0.0001544719865276924,
+                    "Percentage": 0.015447198652769244
+                }
+            ],
+            "top_5_contribution": 99.77621622296674,
+            "features_80_count": 1,
+            "categories": {
+                "Price": 0.9923288170992965,
+                "Volume": 0.0003024064416198172,
+                "Simple Moving Average": 0.0006549771687531458,
+                "Exponential Moving Average": 0.0036474788065006133,
+                "RSI": 0.00018602509138312883,
+                "MACD": 0.000435568195325958,
+                "Bollinger Bands": 0.0003233472765144983,
+                "Other": 0.002121379920606177
+            }
+        },
+        "global_importance": {
+            "top_10_overall": [
+                {
+                    "Feature": "Low",
+                    "Average": 0.3954406324790211,
+                    "Std": 0.25843084336723077
+                },
+                {
+                    "Feature": "High",
+                    "Average": 0.3329034787917414,
+                    "Std": 0.23275400911883712
+                },
+                {
+                    "Feature": "EMA_5",
+                    "Average": 0.06767503942198284,
+                    "Std": 0.08437884326456122
+                },
+                {
+                    "Feature": "Open",
+                    "Average": 0.04904327448865128,
+                    "Std": 0.060959518621285416
+                },
+                {
+                    "Feature": "EMA_10",
+                    "Average": 0.03245655498275023,
+                    "Std": 0.041086991913656265
+                },
+                {
+                    "Feature": "SMA_5",
+                    "Average": 0.03106700978129242,
+                    "Std": 0.041439709569781595
+                },
+                {
+                    "Feature": "SMA_10",
+                    "Average": 0.02511116417419488,
+                    "Std": 0.03176862583037563
+                },
+                {
+                    "Feature": "SMA_20",
+                    "Average": 0.015147975655110108,
+                    "Std": 0.0172626944533282
+                },
+                {
+                    "Feature": "BB_Lower",
+                    "Average": 0.012245908687024253,
+                    "Std": 0.01932151216282971
+                },
+                {
+                    "Feature": "BB_Upper",
+                    "Average": 0.012240256159482418,
+                    "Std": 0.016703577739278535
+                }
+            ],
+            "most_consistent": [
+                "Low",
+                "High",
+                "EMA_5"
+            ],
+            "top_category": {
+                "name": "BBTN",
+                "percentage": 20.000000000000004
+            },
+            "reduction_potential": {
+                "from": 20,
+                "to": 3
+            },
+            "report_gen_date": "2026-02-06 06:08:02"
         }
     },
     "BBTN": {
@@ -1071,7 +1607,141 @@
             "avg_rmse": 0.02407293629840382,
             "avg_r2": 0.9664805168636816,
             "avg_mape": Infinity,
-            "report_date": "2026-02-06 05:23:28"
+            "report_date": "2026-02-06 06:08:02"
+        },
+        "feature_importance": {
+            "top_10": [
+                {
+                    "Feature": "Low",
+                    "Importance": 0.5744161697739987,
+                    "Percentage": 57.44161697739985
+                },
+                {
+                    "Feature": "High",
+                    "Importance": 0.3270784955748752,
+                    "Percentage": 32.70784955748752
+                },
+                {
+                    "Feature": "EMA_5",
+                    "Importance": 0.016087518207918615,
+                    "Percentage": 1.6087518207918612
+                },
+                {
+                    "Feature": "EMA_20",
+                    "Importance": 0.014488557364453048,
+                    "Percentage": 1.4488557364453045
+                },
+                {
+                    "Feature": "Open",
+                    "Importance": 0.01367538447710671,
+                    "Percentage": 1.3675384477106707
+                },
+                {
+                    "Feature": "SMA_20",
+                    "Importance": 0.013480079379294324,
+                    "Percentage": 1.348007937929432
+                },
+                {
+                    "Feature": "BB_Middle",
+                    "Importance": 0.007832450426685372,
+                    "Percentage": 0.783245042668537
+                },
+                {
+                    "Feature": "EMA_10",
+                    "Importance": 0.007534909808262503,
+                    "Percentage": 0.7534909808262501
+                },
+                {
+                    "Feature": "BB_Lower",
+                    "Importance": 0.006011530814998965,
+                    "Percentage": 0.6011530814998963
+                },
+                {
+                    "Feature": "SMA_10",
+                    "Importance": 0.005774078572577903,
+                    "Percentage": 0.5774078572577902
+                }
+            ],
+            "top_5_contribution": 94.57461253983523,
+            "features_80_count": 1,
+            "categories": {
+                "Price": 0.9151700498259806,
+                "Volume": 0.0025132078463154426,
+                "Simple Moving Average": 0.02384189058732435,
+                "Exponential Moving Average": 0.03811098538063417,
+                "RSI": 0.0005862478061242046,
+                "MACD": 0.0018369576033634826,
+                "Bollinger Bands": 0.014590623013892249,
+                "Other": 0.0033500379363657143
+            }
+        },
+        "global_importance": {
+            "top_10_overall": [
+                {
+                    "Feature": "Low",
+                    "Average": 0.3954406324790211,
+                    "Std": 0.25843084336723077
+                },
+                {
+                    "Feature": "High",
+                    "Average": 0.3329034787917414,
+                    "Std": 0.23275400911883712
+                },
+                {
+                    "Feature": "EMA_5",
+                    "Average": 0.06767503942198284,
+                    "Std": 0.08437884326456122
+                },
+                {
+                    "Feature": "Open",
+                    "Average": 0.04904327448865128,
+                    "Std": 0.060959518621285416
+                },
+                {
+                    "Feature": "EMA_10",
+                    "Average": 0.03245655498275023,
+                    "Std": 0.041086991913656265
+                },
+                {
+                    "Feature": "SMA_5",
+                    "Average": 0.03106700978129242,
+                    "Std": 0.041439709569781595
+                },
+                {
+                    "Feature": "SMA_10",
+                    "Average": 0.02511116417419488,
+                    "Std": 0.03176862583037563
+                },
+                {
+                    "Feature": "SMA_20",
+                    "Average": 0.015147975655110108,
+                    "Std": 0.0172626944533282
+                },
+                {
+                    "Feature": "BB_Lower",
+                    "Average": 0.012245908687024253,
+                    "Std": 0.01932151216282971
+                },
+                {
+                    "Feature": "BB_Upper",
+                    "Average": 0.012240256159482418,
+                    "Std": 0.016703577739278535
+                }
+            ],
+            "most_consistent": [
+                "Low",
+                "High",
+                "EMA_5"
+            ],
+            "top_category": {
+                "name": "BBTN",
+                "percentage": 20.000000000000004
+            },
+            "reduction_potential": {
+                "from": 20,
+                "to": 3
+            },
+            "report_gen_date": "2026-02-06 06:08:02"
         }
     }
 }
