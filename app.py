@@ -43,8 +43,7 @@ menu = st.sidebar.radio("Pilih Tahapan Implementasi:", [
     "1. Pengumpulan Data",
     "2. Prapemrosesan Data",
     "3. Evaluasi Performa Model",
-    "4. Analisis Feature Importance",
-    "5. Demo Prediksi Real-time"
+    "4. Demo Prediksi Real-time"
 ])
 
 bank_pilihan = st.sidebar.selectbox("Pilih Bank Fokus:", ["BBCA", "BBRI", "BMRI", "BBNI", "BBTN"])
@@ -193,7 +192,7 @@ elif menu == "2. Prapemrosesan Data":
         st.markdown("""
         Proses ini menggunakan **MinMaxScaler** untuk menyamakan skala seluruh fitur ke dalam rentang **0 hingga 1**. 
         Hal ini krusial karena model *Random Forest* akan lebih stabil jika fitur dengan angka besar (Volume) memiliki bobot yang setara dengan fitur angka kecil (Harga).
-        """)
+        Tahap ini memastikan seluruh fitur memiliki skala yang seragam antara **0 hingga 1**. Tanpa normalisasi, fitur dengan nominal besar (Volume) akan mendominasi perhitungan model dibandingkan fitur harga.""")
 
         # Dokumentasi Kode Proses Normalisasi
         with st.expander("Lihat Logika Kode Normalisasi"):
@@ -211,52 +210,56 @@ elif menu == "2. Prapemrosesan Data":
                 index=features_to_scale.index
             )
                         """, language='python')
-        # Tampilan Hasil Log Normalisasi (Sesuai Image 1 Anda)
-        if s:
-            st.info(f"**📈 Log Normalisasi: {bank_pilihan}**")
-            col_log1, col_log2 = st.columns(2)
-            with col_log1:
-                st.write("**Sebelum Normalisasi:**")
-                st.write(f"- Range Harga: {s.get('price_range')}")
-                st.write(f"- Status: Raw Data ditarik")
-            with col_log2:
-                # Mengambil data verifikasi dari JSON
-                v = s.get('norm_verification', {})
-                close_v = v.get('Close', {})
-                st.write("**Sesudah Normalisasi:**")
-                st.write(f"- Range Harga: {close_v.get('min', 0):.6f} - {close_v.get('max', 1):.6f}")
-                st.write(f"- Status: Berhasil (Range [0,1])")
-
-        st.divider()
-
-        # Visualisasi Perbandingan
-        col_img1, col_img2 = st.columns(2)
-        with col_img1:
-            img_04 = "Visual/04_Perbandingan_Normalisasi.png"
-            if os.path.exists(img_04):
-                st.image(img_04, caption="Interpretasi: Transformasi distribusi data mentah yang lebar menjadi terkumpul dalam rentang standar 0-1.")
-        with col_img2:
-            img_05 = f"Visual/05_Distribusi_Setelah_Normalisasi_{bank_pilihan}.png"
-            if os.path.exists(img_05):
-                st.image(img_05, caption=f"Distribusi Setelah Normalisasi: {bank_pilihan}")
-
-        st.divider()
-
-        # Statistik Deskriptif Setelah Normalisasi (Sesuai Image 2 Anda)
-        st.subheader("Statistik Deskriptif & Verifikasi Range")
-        if 'norm_stats' in s:
-            st.write("Statistik fitur utama setelah scaling:")
-            st.table(pd.DataFrame(s['norm_stats']))
             
-            # Verifikasi Range [0,1]
-            st.markdown("**Verifikasi Range [0, 1]:**")
-            v_cols = st.columns(4)
-            for i, (col_name, limits) in enumerate(s.get('norm_verification', {}).items()):
-                v_cols[i].caption(f"**{col_name}**")
-                v_cols[i].write(f"Min: {limits['min']:.6f}")
-                v_cols[i].write(f"Max: {limits['max']:.6f}")
+        # A. RINGKASAN NORMALISASI DALAM BENTUK KARTU (Sesuai Bank Pilihan)
+        if s and 'norm_verification' in s:
+            v = s['norm_verification']
+            
+            # Baris Pertama: Info Dasar
+            col_info1, col_info2 = st.columns(2)
+            with col_info1:
+                st.info(f"**Dimensi Data:** {s.get('rows')} Baris")
+            with col_info2:
+                st.info(f"**Jumlah Fitur:** {len(s.get('columns', []))} Kolom")
+
+            # Baris Kedua: Verifikasi Range (Kartu)
+            st.markdown("### Verifikasi Range [0, 1]")
+            c1, c2, c3 = st.columns(3)
+            
+            with c1:
+                st.metric("Normalized Close", "0.0000 - 1.0000")
+                st.caption(f"Original: {s.get('price_range')}")
+            
+            with c2:
+                st.metric("Normalized Volume", "0.0000 - 1.0000")
+                st.caption(f"Original: {s.get('avg_volume')} (Avg)")
+            
+            with c3:
+                # Menampilkan fitur lain seperti RSI jika ada
+                if 'RSI' in v:
+                    st.metric("Normalized RSI", f"{v['RSI']['min']:.2f} - {v['RSI']['max']:.2f}")
+                    st.caption("Momentum Scaled")
         else:
-            st.warning("Data statistik normalisasi belum tersedia di data_summary.json")
+            st.warning(f"Data normalisasi untuk {bank_pilihan} belum tersedia di data_summary.json")
+
+        st.divider()
+
+        # B. VISUALISASI DISTRIBUSI SPESIFIK BANK
+        st.subheader(f"Analisis Distribusi & Outlier: {bank_pilihan}")
+        img_dist = f"Visual/05_Distribusi_{bank_pilihan}.png"
+        
+        if os.path.exists(img_dist):
+            st.image(img_dist, use_container_width=True)
+            
+            # C. INTERPRETASI DATA
+            with st.expander("Interpretasi Grafik"):
+                st.markdown(f"""
+                **Analisis untuk {bank_pilihan}:**
+                * **Histogram**: Memperlihatkan bahwa setelah normalisasi, bentuk asli distribusi data tetap terjaga, namun sumbu X kini berada di rentang 0-1. Garis merah (Mean) menunjukkan posisi rata-rata data hasil scaling.
+                * **Box Plot**: Memvalidasi bahwa tidak ada nilai yang keluar dari batas 0 atau 1. Kotak biru menunjukkan area konsentrasi harga terbesar (Interquartile Range) untuk {bank_pilihan}.
+                """)
+        else:
+            st.error(f"Grafik distribusi {img_dist} tidak ditemukan.")
 
     # --- TAB 4: DATA SPLITTING ---
     with tab4:
@@ -293,7 +296,7 @@ elif menu == "2. Prapemrosesan Data":
         # Visualisasi Area Split
         img_06 = "Visual/06_Visualisasi_Pembagian_Pelatihan_Uji.png"
         if os.path.exists(img_06):
-            st.image(img_06, caption="Interpretasi: Area hijau (80%) adalah data historis untuk pelatihan, area oranye (20%) adalah data simulasi masa depan untuk pengujian.")
+            st.image(img_06, caption="Interpretasi: Area Biru (80%) adalah data historis untuk pelatihan, area oranye (20%) adalah data simulasi masa depan untuk pengujian.")
 
         st.divider()
 
@@ -340,29 +343,92 @@ elif menu == "2. Prapemrosesan Data":
 
 # MENU 3: EVALUASI PERFORMA
 elif menu == "3. Evaluasi Performa Model":
-    st.header(f"Hasil Evaluasi Model: {bank_pilihan}")
+    st.header(f"Tahap 3: Evaluasi & Interpretasi Model: {bank_pilihan})")
     
-    if m:
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("R² Score", f"{m['r2']:.4f}")
-        col2.metric("MAE", f"Rp {m['mae']:.2f}")
-        col3.metric("MAPE", f"{m['mape']:.2f}%")
-        col4.metric("RMSE", f"{m['rmse']:.2f}")
-    else:
-        st.error("Metrik evaluasi tidak ditemukan.")
+    # Pembagian 4 Tab Utama sesuai permintaan
+    tab1, tab2, tab3, tab4 = st.tabs([
+        "1. Training & Tuning", 
+        "2. Prediksi (Data Test)", 
+        "3. Skor Performa", 
+        "4. Feature Importance"
+    ])
 
-    st.subheader("Visualisasi Prediksi vs Aktual")
-    st.image(f"Visual/09_Prediction_{bank_pilihan}.png")
+    # --- TAB 1: TRAINING & TUNING (Proses Pemodelan) ---
+    with tab1:
+        st.subheader("Pembangunan & Optimasi Model RFR")
+        # OTOMATIS: Membuat Tabel Ringkasan Baseline untuk Semua Bank
+        st.markdown("**Ringkasan Baseline Performance (Semua Bank):**")
+        baseline_list = []
+        for ticker, data in summary_data.items():
+            if 'baseline_perf' in data:
+                bp = data['baseline_perf']
+                baseline_list.append({
+                    'Bank': ticker,
+                    'Train R²': f"{bp['train_r2']:.4f}",
+                    'Test R²': f"{bp['test_r2']:.4f}",
+                    'MAE': f"{bp['mae']:.2f}",
+                    'Time (s)': f"{bp['time']:.2f}"
+                })
+        
+        if baseline_list:
+            st.table(pd.DataFrame(baseline_list))
+        else:
+            st.warning("Data baseline belum tersedia di data_summary.json")
 
-# MENU 4: FEATURE IMPORTANCE
-elif menu == "4. Analisis Feature Importance":
-    st.header(f"Interpretasi Model: {bank_pilihan}")
-    st.write("Menganalisis faktor (fitur teknikal) yang paling mempengaruhi keputusan model.")
-    st.image(f"Visual/18_Feature_Importance_{bank_pilihan}.png")
-    st.warning("Temuan: Variabel harga harian (High/Low) tetap menjadi prediktor paling dominan dalam model ini.")
+        # Detail Tuning untuk Bank yang dipilih
+        if 'tuning_results' in s:
+            st.divider()
+            st.markdown(f"**Optimasi Hyperparameter ({bank_pilihan}):**")
+            st.json(s['tuning_results']['best_params'])
+            st.success(f"Peningkatan Akurasi vs Baseline: {s['tuning_results']['improvement']:.6f}")
 
-# MENU 5: DEMO PREDIKSI
-elif menu == "5. Demo Prediksi Real-time":
+    # --- TAB 2: PREDIKSI (DATA TEST) ---
+    with tab2:
+        st.subheader("Visualisasi Prediksi pada Data Test: {bank_pilihan}")
+        st.markdown(f"""
+        Model Final digunakan untuk memprediksi 20% data terakhir (Data Test) yang tidak pernah dilihat sebelumnya 
+        oleh model saat pelatihan. Ini membuktikan kemampuan generalisasi model.
+        """)
+        
+        img_09 = f"Visual/09_Prediction_{bank_pilihan}.png"
+        if os.path.exists(img_09):
+            st.image(img_09, caption=f"Grafik Prediksi vs Aktual {bank_pilihan} (Data Test)", use_container_width=True)
+            st.info("Garis merah putus-putus menunjukkan seberapa akurat model mengikuti fluktuasi harga asli (garis biru).")
+        else:
+            st.error(f"File {img_09} belum tersedia di folder Visual.")
+
+    # --- TAB 3: SKOR PERFORMA (EVALUASI HASIL TEST) ---
+    with tab3:
+        st.subheader("Evaluasi Akhir Model (Testing)")
+        if m: # m adalah data dari metrics.json sesuai bank_pilihan
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("R² Score", f"{m.get('r2', 0):.4f}")
+            c2.metric("MAE", f"Rp {m.get('mae', 0):.2f}")
+            c3.metric("MAPE", f"{m.get('mape', 0):.2f}%")
+            c4.metric("RMSE", f"{m.get('rmse', 0):.2f}")
+            
+        st.divider()
+        img_11 = "Visual/11_Scatter_Aktual_vs_Prediksi.png"
+        if os.path.exists(img_11):
+            st.image(img_11, caption="Scatter Plot: Hubungan Nilai Aktual vs Prediksi (Global), Kedekatan titik dengan garis diagonal menunjukkan tingkat akurasi.", use_container_width=True)
+    
+    # --- TAB 4: FEATURE IMPORTANCE ---
+    with tab4:
+        st.subheader("Variabel Paling Berpengaruh (Feature Importance)")
+        st.markdown("""
+        Analisis ini menunjukkan indikator teknikal mana yang paling dominan dalam membantu model 
+        memutuskan angka prediksi harga saham.
+        """)
+        
+        img_18 = f"Visual/18_Feature_Importance_{bank_pilihan}.png"
+        if os.path.exists(img_18):
+            st.image(img_18, caption=f"Top 10 Fitur Berpengaruh: {bank_pilihan}", use_container_width=True)
+            st.success("Fitur harga harian dan Moving Averages biasanya menjadi faktor penentu utama.")
+        else:
+            st.error(f"File {img_18} belum tersedia.")
+
+# MENU 4: DEMO PREDIKSI
+elif menu == "4. Demo Prediksi Real-time":
     st.header("Demo Prediksi Harga Esok Hari")
     st.write(f"Simulasi harga penutupan menggunakan model yang sudah dilatih untuk {bank_pilihan}")
 
