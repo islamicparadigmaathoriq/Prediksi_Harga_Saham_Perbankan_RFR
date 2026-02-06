@@ -584,18 +584,121 @@ elif menu == "3. Evaluasi Performa Model":
     
     # --- TAB 4: FEATURE IMPORTANCE ---
     with tab4:
-        st.subheader("Variabel Paling Berpengaruh (Feature Importance)")
-        st.markdown("""
-        Analisis ini menunjukkan indikator teknikal mana yang paling dominan dalam membantu model 
-        memutuskan angka prediksi harga saham.
-        """)
+        st.header(f"Interpretasi & Kontribusi Fitur: {bank_pilihan}")
         
-        img_18 = f"Visual/18_Feature_Importance_{bank_pilihan}.png"
-        if os.path.exists(img_18):
-            st.image(img_18, caption=f"Top 10 Fitur Berpengaruh: {bank_pilihan}", use_container_width=True)
-            st.success("Fitur harga harian dan Moving Averages biasanya menjadi faktor penentu utama.")
-        else:
-            st.error(f"File {img_18} belum tersedia.")
+        # Membuat sub-tab di dalam Tab 4 agar laporan tersusun rapi
+        sub1, sub2, sub3 = st.tabs([
+            "1. Analisis Per Bank", 
+            "2. Sektoral & Konsistensi", 
+            "3. Laporan Komprehensif"
+        ])
+
+        # --- SUB-TAB 1: ANALISIS PER BANK ---
+        with sub1:
+            st.subheader(f"Analisis Kontribusi Fitur: {bank_pilihan}")
+            
+            if s and 'feature_importance' in s:
+                fi = s['feature_importance']
+                
+                # Card Utama (Dinamis dari JSON)
+                c1, c2, c3 = st.columns(3)
+                c1.metric("Kontribusi Top 5", f"{fi['top_5_contribution']:.2f}%")
+                c2.metric("Fitur Utama (80% Imp)", f"{fi['features_80_count']} / 20")
+                c3.metric("Fitur Terpenting", fi['top_10'][0]['Feature'])
+
+                st.divider()
+                
+                # Visualisasi Image 18 (Batang & Pareto)
+                img_18 = f"Visual/18_Feature_Importance_{bank_pilihan}.png"
+                if os.path.exists(img_18):
+                    st.image(img_18, caption=f"Diagram Batang & Analisis Pareto Feature Importance ({bank_pilihan})", use_container_width=True)
+                
+                with st.expander("📝 Interpretasi Hasil Ekstraksi"):
+                    st.markdown(f"""
+                    **Analisis Fitur {bank_pilihan}:**
+                    * **Dominasi Fitur**: Fitur **{fi['top_10'][0]['Feature']}** memberikan pengaruh terbesar terhadap keputusan model.
+                    * **Efisiensi Model**: Hanya dibutuhkan **{fi['features_80_count']} fitur** untuk mencapai tingkat kepentingan kumulatif 80%. Ini menunjukkan potensi penyederhanaan model di masa depan.
+                    * **Kategori Terkuat**: Berdasarkan visualisasi, indikator harga harian (Price) tetap menjadi faktor penentu utama dibandingkan indikator momentum lainnya.
+                    """)
+            
+            st.divider()
+            # Visualisasi Image 20 (Category)
+            st.subheader("Analisis Kategori Fitur")
+            img_20 = "Visual/20_Category_Importance_Analysis.png"
+            if os.path.exists(img_20):
+                st.image(img_20, caption="Distribusi Kontribusi Berdasarkan Kelompok Indikator Teknikal", use_container_width=True)
+
+        # --- SUB-TAB 2: SEKTORAL & KONSISTENSI ---
+        with sub2:
+            st.subheader("Perbandingan Feature Importance Antar Bank")
+            
+            # Visualisasi Image 19 (Heatmap)
+            img_19 = "Visual/19_Feature_Importance_Comparison.png"
+            if os.path.exists(img_19):
+                st.image(img_19, caption="Heatmap: Konsistensi Skor Importance di Seluruh Sektor Perbankan", use_container_width=True)
+            
+            st.divider()
+            
+            # Visualisasi Image 21 (Consistency Analysis)
+            st.subheader("Analisis Konsistensi Fitur Terpenting")
+            img_21 = "Visual/21_Feature_Consistency_Analysis.png"
+            if os.path.exists(img_21):
+                st.image(img_21, caption="Fitur yang Secara Konsisten Masuk Top 10 di Seluruh Bank", use_container_width=True)
+                
+            if s and 'global_importance' in s:
+                gi = s['global_importance']
+                st.success(f"**Fitur Paling Konsisten (100% Sektoral):** {', '.join(gi['most_consistent'])}")
+                st.info("""
+                **Insight Sektoral:** Fitur yang konsisten muncul di 5 bank menunjukkan bahwa model Random Forest 
+                mengandalkan pola harga yang serupa untuk memprediksi harga saham di seluruh sektor perbankan Indonesia.
+                """)
+
+        # --- SUB-TAB 3: LAPORAN KOMPREHENSIF ---
+        with sub3:
+            st.subheader("📄 Laporan Analisis Feature Importance")
+            
+            if s and 'global_importance' in s and 'feature_importance' in s:
+                gi = s['global_importance']
+                fi = s['feature_importance']
+                
+                # Format Laporan Bergaya Dokumen Resmi (Berdasarkan Step 8 Riset)
+                report_box = f"""
+============================================================
+       LAPORAN ANALISIS FEATURE IMPORTANCE (FINAL)
+============================================================
+Generated: {gi.get('report_gen_date', datetime.now().strftime('%Y-%m-%d'))}
+Target Bank: {bank_pilihan}
+------------------------------------------------------------
+
+1. RINGKASAN SEKTORAL
+- Total Fitur Dianalisis: {gi['reduction_potential']['from']} Fitur
+- Kategori Paling Penting: {gi['top_category']['name']} ({gi['top_category']['percentage']:.2f}%)
+- Fitur Konsisten di Sektor: {', '.join(gi['most_consistent'])}
+
+2. TOP 5 FITUR KHUSUS {bank_pilihan}
+1. {fi['top_10'][0]['Feature']}: {fi['top_10'][0]['Importance']:.6f} ({fi['top_10'][0]['Percentage']:.2f}%)
+2. {fi['top_10'][1]['Feature']}: {fi['top_10'][1]['Importance']:.6f} ({fi['top_10'][1]['Percentage']:.2f}%)
+3. {fi['top_10'][2]['Feature']}: {fi['top_10'][2]['Importance']:.6f} ({fi['top_10'][2]['Percentage']:.2f}%)
+4. {fi['top_10'][3]['Feature']}: {fi['top_10'][3]['Importance']:.6f} ({fi['top_10'][3]['Percentage']:.2f}%)
+5. {fi['top_10'][4]['Feature']}: {fi['top_10'][4]['Importance']:.6f} ({fi['top_10'][4]['Percentage']:.2f}%)
+
+3. REKOMENDASI OPTIMASI MODEL
+- Potensi Pengurangan Fitur: Dari {gi['reduction_potential']['from']} menjadi ~{gi['reduction_potential']['to']} fitur.
+- Fokus Pengembangan: Prioritaskan pengumpulan data berkualitas pada kategori '{gi['top_category']['name']}'.
+- Interpretasi: Model sangat mengandalkan data harga historis harian dan EMA.
+
+============================================================
+                    AKHIR LAPORAN
+============================================================
+                """
+                st.code(report_box) # Menampilkan format teks agar rapi
+                
+                st.download_button(
+                    label="Unduh Laporan (.txt)",
+                    data=report_box,
+                    file_name=f"Laporan_FI_{bank_pilihan}.txt",
+                    mime="text/plain"
+                )
 
 # MENU 4: DEMO PREDIKSI
 elif menu == "4. Demo Prediksi Real-time":
