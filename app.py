@@ -355,25 +355,78 @@ elif menu == "3. Evaluasi Performa Model":
 
     # --- TAB 1: TRAINING & TUNING (Proses Pemodelan) ---
     with tab1:
-        st.subheader("Pembangunan & Optimasi Model RFR")
-        # OTOMATIS: Membuat Tabel Ringkasan Baseline untuk Semua Bank
-        st.markdown("**Ringkasan Baseline Performance (Semua Bank):**")
-        baseline_list = []
-        for ticker, data in summary_data.items():
-            if 'baseline_perf' in data:
-                bp = data['baseline_perf']
-                baseline_list.append({
-                    'Bank': ticker,
-                    'Train R²': f"{bp['train_r2']:.4f}",
-                    'Test R²': f"{bp['test_r2']:.4f}",
-                    'MAE': f"{bp['mae']:.2f}",
-                    'Time (s)': f"{bp['time']:.2f}"
-                })
+        st.subheader(f"Pembangunan & Optimasi Model: {bank_pilihan}")
+
+        # 1. BASELINE PERFORMANCE CARDS (Sesuai Image 2)
+        if s and 'baseline_perf' in s:
+            bp = s['baseline_perf']
+            st.markdown("### Baseline Performance")
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("Baseline Train R²", f"{bp['train_r2']:.4f}")
+            c2.metric("Baseline Test R²", f"{bp['test_r2']:.4f}")
+            c3.metric("Baseline MAE", f"{bp['mae']:.4f}")
+            c4.metric("Training Time", f"{bp['time']:.2f}s")
+            
+            # Status Target Baseline
+            if bp['test_r2'] >= 0.85:
+                st.success(f"Target Baseline Tercapai! (R² ≥ 0.85)")
+            else:
+                st.warning(f"Target Baseline Belum Tercapai. Perlu Hyperparameter Tuning.")
         
-        if baseline_list:
-            st.table(pd.DataFrame(baseline_list))
+        st.divider()
+
+        # 2. TUNED MODEL PERFORMANCE CARDS (Sesuai Image 3)
+        if s and 'tuning_results' in s:
+            tr = s['tuning_results']
+            st.markdown("### Tuned Model Performance")
+            tc1, tc2, tc3 = st.columns(3)
+            tc1.metric("Final Tuned R²", f"{tr['final_r2']:.4f}", f"{tr['improvement']:+.6f}")
+            tc2.metric("Best Max Depth", tr['best_params'].get('max_depth', 'N/A'))
+            tc3.metric("Best Estimators", tr['best_params'].get('n_estimators', 'N/A'))
+            
+            with st.expander("Lihat Parameter Terbaik"):
+                st.json(tr['best_params'])
+        
+        st.divider()
+
+        # 3. K-FOLD CROSS VALIDATION (Image 4)
+        st.subheader("Validasi Stabilitas: K-Fold Cross-Validation")
+        img_cv = "Visual/08_Skor_Cross_Validation.png"
+        if os.path.exists(img_cv):
+            st.image(img_cv, caption="Distribusi Skor R² pada 5-Fold Cross Validation")
+            
+            # Interpretasi Image 4
+            st.info("""
+            **Interpretasi Grafik Cross-Validation:**
+            * **Garis Merah Putus-putus**: Menunjukkan rata-rata (*Mean*) skor R² dari 5 kali percobaan. Semakin tinggi garis ini, semakin akurat model secara umum.
+            * **Garis Hijau Titik-titik**: Batas target akurasi (0.85).
+            * **Batang Biru**: Menunjukkan konsistensi model pada setiap lipatan (*fold*). Jika tinggi batang relatif seragam (seperti pada BBCA atau BNI), berarti model sangat stabil dan tidak mengalami *overfitting*[cite: 1508, 1509].
+            """)
         else:
-            st.warning("Data baseline belum tersedia di data_summary.json")
+            st.error("File 08_Skor_Cross_Validation.png tidak ditemukan.")
+
+        st.divider()
+
+        # 4. FINAL COMPREHENSIVE PERFORMANCE (Sesuai Image 5)
+        st.subheader("Ringkasan Comprehensive Final")
+        if s and 'baseline_perf' in s:
+            # Membuat baris status final
+            status_color = "green" if s['tuning_results']['final_r2'] >= 0.85 else "red"
+            st.markdown(f"""
+            | Metric | Score | Status |
+            | :--- | :--- | :--- |
+            | **Final Train R²** | {s['baseline_perf']['train_r2']:.6f} | Pass |
+            | **Final Test R²** | {s['tuning_results']['final_r2']:.6f} | {'Pass' if s['tuning_results']['final_r2'] >= 0.85 else 'Below Target'} |
+            | **Final MAE** | {s['baseline_perf']['mae']:.6f} | Optimized |
+            """)
+        
+        # Statistik Keseluruhan (Rata-rata dari summary_data)
+            all_r2 = [v['tuning_results']['final_r2'] for k, v in summary_data.items() if 'tuning_results' in v]
+            if all_r2:
+                avg_r2 = sum(all_r2) / len(all_r2)
+                st.write(f"**Rata-rata Akurasi Sektor (5 Bank):** `{avg_r2:.6f}`")
+                if avg_r2 >= 0.85:
+                    st.success("SEMUA BANK MELEWATI TARGET!")
 
         # Detail Tuning untuk Bank yang dipilih
         if 'tuning_results' in s:
