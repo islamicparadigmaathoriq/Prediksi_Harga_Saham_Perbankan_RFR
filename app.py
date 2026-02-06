@@ -514,20 +514,73 @@ elif menu == "3. Evaluasi Performa Model":
             pada area hijau membuktikan kesiapannya untuk implementasi real-time.
             """)
 
-    # --- TAB 3: SKOR PERFORMA (EVALUASI HASIL TEST) ---
+    # --- TAB 3: SKOR PERFORMA (LAPORAN KOMPREHENSIF) ---
     with tab3:
-        st.subheader("Evaluasi Akhir Model (Testing)")
-        if m: # m adalah data dari metrics.json sesuai bank_pilihan
-            c1, c2, c3, c4 = st.columns(4)
-            c1.metric("R² Score", f"{m.get('r2', 0):.4f}")
-            c2.metric("MAE", f"Rp {m.get('mae', 0):.2f}")
-            c3.metric("MAPE", f"{m.get('mape', 0):.2f}%")
-            c4.metric("RMSE", f"{m.get('rmse', 0):.2f}")
+        st.header(f"Laporan Evaluasi Komprehensif: {bank_pilihan}")
+        
+        if s and 'comprehensive_metrics' in s:
+            m_comp = s['comprehensive_metrics']
+            agg = s['aggregate_stats']
             
-        st.divider()
-        img_11 = "Visual/11_Scatter_Aktual_vs_Prediksi.png"
-        if os.path.exists(img_11):
-            st.image(img_11, caption="Scatter Plot: Hubungan Nilai Aktual vs Prediksi (Global), Kedekatan titik dengan garis diagonal menunjukkan tingkat akurasi.", use_container_width=True)
+            # A. KINERJA INDIVIDUAL (Image 8 dalam bentuk Card)
+            st.subheader("1. Kinerja Individual (Test Set)")
+            col_m1, col_m2, col_m3, col_m4 = st.columns(4)
+            col_m1.metric("MAE", f"{m_comp['test']['mae']:.6f}")
+            col_m2.metric("RMSE", f"{m_comp['test']['rmse']:.6f}")
+            col_m3.metric("R² Score", f"{m_comp['test']['r2']:.6f}")
+            col_m4.metric("MAPE", f"{m_comp['test']['mape']:.2f}%")
+            
+            with st.expander("Lihat Detail Error (Max/Mean/Std)"):
+                st.write(f"- **Max Error**: {m_comp['test']['max_error']:.6f}")
+                st.write(f"- **Mean Error (Bias)**: {m_comp['test']['mean_error']:.6f}")
+                st.write(f"- **Std Error**: {m_comp['test']['std_error']:.6f}")
+
+            # B. RINGKASAN AGGREGAT (Image 7)
+            st.divider()
+            st.subheader("2. Ringkasan & Aggregate Performance")
+            st.markdown(f"""
+            | Deskripsi | Nilai Sektoral (Average) |
+            | :--- | :--- |
+            | **Average R²** | {agg['avg_r2']:.6f} |
+            | **Average MAE** | {agg['avg_mae']:.6f} |
+            | **Average MAPE** | {agg['avg_mape']:.2f}% |
+            | **Report Date** | {agg['report_date']} |
+            """)
+
+            # C. VISUALISASI METRIK (Image 15 & 17)
+            st.divider()
+            st.subheader("3. Analisis Visual Metrik & Overfitting")
+            
+            img_15 = "Visual/15_Metrik_Evaluasi_Model.png"
+            if os.path.exists(img_15):
+                st.image(img_15, caption="Perbandingan MAE, RMSE, R², dan MAPE Sektoral")
+            
+            img_17 = "Visual/17_Performa_Train_vs_Test.png"
+            if os.path.exists(img_17):
+                st.image(img_17, caption="Analisis Overfitting (Gap Train vs Test)")
+            
+            # D. ANALISIS OVERFITTING (Image 6 dalam bentuk Card)
+            st.info(f"""
+            **Analisis Overfitting {bank_pilihan}:**
+            * **Train R²**: {m_comp['train']['r2']:.6f}
+            * **Test R²**: {m_comp['test']['r2']:.6f}
+            * **Gap**: {m_comp['gap_analysis']['gap']:.6f}
+            * **Status**: {m_comp['gap_analysis']['status']}
+            """)
+
+            # E. TEMUAN UTAMA & REKOMENDASI
+            st.divider()
+            st.subheader("4. Temuan Utama & Rekomendasi")
+            if m_comp['test']['r2'] >= 0.85:
+                st.success(f"**Target Tercapai!** Model {bank_pilihan} memiliki generalisasi yang sangat baik.")
+            else:
+                st.error(f"**Dibawah Target!** Diperlukan Hyperparameter Tuning lanjutan atau Feature Engineering tambahan.")
+                
+            with st.expander("Lihat Rekomendasi Teknis"):
+                st.write("- Tingkatkan regularisasi jika Gap > 0.1.")
+                st.write("- Gunakan lebih banyak data pelatihan untuk mengurangi volatilitas error.")
+        else:
+            st.warning("Data evaluasi komprehensif belum tersedia di JSON.")
     
     # --- TAB 4: FEATURE IMPORTANCE ---
     with tab4:
